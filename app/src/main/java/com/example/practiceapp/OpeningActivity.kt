@@ -20,7 +20,7 @@ class OpeningActivity : AppCompatActivity() {
     private lateinit var binding: ActivityOpeningBinding
     private val viewModel: OpeningViewModel by viewModels()
 
-    private var isExpanded: Boolean = true // TODO extract to extension function / some manager
+    private var isExpanded: Boolean = false
 
     private val bottomSheetView by lazy { findViewById<ConstraintLayout>(R.id.bottomSheet) }
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
@@ -40,47 +40,55 @@ class OpeningActivity : AppCompatActivity() {
         setUpObservers()
 
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetView)
-        toggleBottomSheet() // Hidden by default it seems
-    }
-
-    private fun toggleBottomSheet() {
-        if (isExpanded) {
-           isExpanded = false
-        } else {
-            isExpanded = true
-        }
-
-        val updatedState = if (!isExpanded) BottomSheetBehavior.STATE_COLLAPSED else BottomSheetBehavior.STATE_EXPANDED
-        bottomSheetBehavior.state = updatedState
     }
 
     private fun setListeners() {
         with (binding) {
-            bottomSheetButton.setOnClickListener { viewModel.onBottomSheetButtonClicked() }
+            bottomSheetButton.setOnClickListener { viewModel.onBottomSheetButtonClicked(isExpanded) }
         }
     }
 
     // https://medium.com/androiddevelopers/a-safer-way-to-collect-flows-from-android-uis-23080b1f8bda#:~:text=Use%20the%20Lifecycle.,the%20UI%20layer%20in%20Android.
     private fun setUpObservers() {
         lifecycleScope.launch {
-            viewModel.event.flowWithLifecycle(lifecycle).collect() {
-                renderEvent()
+            viewModel.event.flowWithLifecycle(lifecycle).collect() { event ->
+                when(event) {
+                    OpeningViewModel.Event.OpenBottomSheet -> openBottomSheet()
+                    OpeningViewModel.Event.CloseBottomSheet -> closeBottomSheet()
+                }
             }
         }
-    }
-
-    private fun renderEvent() {
-        toggleBottomSheet()
-        Toast.makeText(applicationContext, "JIMMY", Toast.LENGTH_SHORT).show()
     }
 
     override fun onBackPressed() {
         if(isExpanded) {
             Log.e("jimmy", isExpanded.toString())
-            toggleBottomSheet()
+            closeBottomSheet()
         } else {
             super.onBackPressed()
         }
+    }
+
+//    private fun toggleBottomSheet() {
+//        if (isExpanded) {
+//            isExpanded = false
+//        } else {
+//            isExpanded = true
+//        }
+//        val updatedState = if (!isExpanded) BottomSheetBehavior.STATE_COLLAPSED else BottomSheetBehavior.STATE_EXPANDED
+//        bottomSheetBehavior.state = updatedState
+//    }
+
+    private fun openBottomSheet() {
+        isExpanded = !isExpanded // inverts the boolean
+        //val updatedState = if (!isExpanded) BottomSheetBehavior.STATE_COLLAPSED else
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+    }
+
+    private fun closeBottomSheet() {
+        isExpanded = !isExpanded // inverts the boolean
+        //val updatedState = if (!isExpanded) BottomSheetBehavior.STATE_COLLAPSED else BottomSheetBehavior.STATE_EXPANDED
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
 

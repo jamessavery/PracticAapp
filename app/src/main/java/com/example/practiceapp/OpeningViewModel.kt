@@ -11,14 +11,19 @@ class OpeningViewModel : ViewModel() {
     private val _event: MutableSharedFlow<Event> = MutableSharedFlow()
     val event: SharedFlow<Event> = _event
 
-    fun onBottomSheetButtonClicked() {
+    fun onBottomSheetButtonClicked(toggled: Boolean) {
         viewModelScope.launch {
-            _event.emit(Event.OpenBottomSheet)
+            if(toggled) {
+                _event.emit(Event.CloseBottomSheet)
+            } else {
+                _event.emit(Event.OpenBottomSheet)
+            }
         }
     }
 
     sealed class Event {
         object OpenBottomSheet : Event()
+        object CloseBottomSheet : Event()
     }
 
 }
