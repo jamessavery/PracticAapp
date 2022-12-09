@@ -1,20 +1,24 @@
-package com.example.practiceapp
+package com.example.practiceapp.OpeningScreen
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.ui.AppBarConfiguration
+import com.example.practiceapp.R
 import com.example.practiceapp.databinding.ActivityOpeningBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.launch
 
-class OpeningActivity : AppCompatActivity() {
+class OpeningActivity : AppCompatActivity(), LifecycleOwner {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityOpeningBinding
@@ -27,24 +31,23 @@ class OpeningActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        super.onCreate(savedInstanceState)
-
         binding = ActivityOpeningBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-//        val navController = findNavController(R.id.nav_host_fragment_content_opening)
-//        appBarConfiguration = AppBarConfiguration(navController.graph)
-//        setupActionBarWithNavController(navController, appBarConfiguration)
-
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetView)
         setListeners()
         setUpObservers()
-
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetView)
+        super.onCreate(savedInstanceState)
     }
 
     private fun setListeners() {
-        with (binding) {
+        with(binding) {
             bottomSheetButton.setOnClickListener { viewModel.onBottomSheetButtonClicked(isExpanded) }
+            liveDataButton.setOnClickListener {
+                var countIndex = viewModel.getUpdatedCount()
+                Log.e("jimmy", "jimmy count - $countIndex")
+                viewModel.setLoading(true)
+                viewModel.loadJimmys()
+            }
         }
     }
 
@@ -52,16 +55,36 @@ class OpeningActivity : AppCompatActivity() {
     private fun setUpObservers() {
         lifecycleScope.launch {
             viewModel.event.flowWithLifecycle(lifecycle).collect() { event ->
-                when(event) {
+                when (event) {
                     OpeningViewModel.Event.OpenBottomSheet -> openBottomSheet()
                     OpeningViewModel.Event.CloseBottomSheet -> closeBottomSheet()
                 }
             }
         }
+        lifecycleScope.launch {
+            viewModel.loadingState.flowWithLifecycle(lifecycle).collect() { loadingState ->
+                when (loadingState) {
+                    OpeningViewModel.LoadingState.Idle -> binding.progressCircular.visibility =
+                        View.GONE
+                    OpeningViewModel.LoadingState.Loading -> binding.progressCircular.visibility =
+                        View.VISIBLE
+                }
+            }
+        }
+        lifecycleScope.launch {
+            viewModel.count.observe(this@OpeningActivity, Observer {
+                Log.e("jimmy", "jimmy3 - $it") // Jimmy todo its not reaching this point!
+            })
+        }
+        lifecycleScope.launch {
+            viewModel.jimmysLiveData.observe(this@OpeningActivity, Observer {
+                Log.e("jimmy", "jimmy3 - $it") // Jimmy todo its not reaching this point!
+            })
+        }
     }
 
     override fun onBackPressed() {
-        if(isExpanded) {
+        if (isExpanded) {
             Log.e("jimmy", isExpanded.toString())
             closeBottomSheet()
         } else {
@@ -69,32 +92,13 @@ class OpeningActivity : AppCompatActivity() {
         }
     }
 
-//    private fun toggleBottomSheet() {
-//        if (isExpanded) {
-//            isExpanded = false
-//        } else {
-//            isExpanded = true
-//        }
-//        val updatedState = if (!isExpanded) BottomSheetBehavior.STATE_COLLAPSED else BottomSheetBehavior.STATE_EXPANDED
-//        bottomSheetBehavior.state = updatedState
-//    }
-
     private fun openBottomSheet() {
         isExpanded = !isExpanded // inverts the boolean
-        //val updatedState = if (!isExpanded) BottomSheetBehavior.STATE_COLLAPSED else
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     private fun closeBottomSheet() {
         isExpanded = !isExpanded // inverts the boolean
-        //val updatedState = if (!isExpanded) BottomSheetBehavior.STATE_COLLAPSED else BottomSheetBehavior.STATE_EXPANDED
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
-
-
-//    override fun onSupportNavigateUp(): Boolean {
-//        val navController = findNavController(R.id.nav_host_fragment_content_opening)
-//        return navController.navigateUp(appBarConfiguration)
-//                || super.onSupportNavigateUp()
-//    }
 }
