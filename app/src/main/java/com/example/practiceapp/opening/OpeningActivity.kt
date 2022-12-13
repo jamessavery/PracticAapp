@@ -1,9 +1,8 @@
-package com.example.practiceapp.OpeningScreen
+package com.example.practiceapp.opening
 
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -45,8 +44,10 @@ class OpeningActivity : AppCompatActivity(), LifecycleOwner {
             liveDataButton.setOnClickListener {
                 var countIndex = viewModel.getUpdatedCount()
                 Log.e("jimmy", "jimmy count - $countIndex")
-                viewModel.setLoading(true)
-                viewModel.loadJimmys()
+                lifecycleScope.launch() {
+                    viewModel.loadTfl()
+                    // Pass value of this if successful into
+                }
             }
         }
     }
@@ -73,12 +74,7 @@ class OpeningActivity : AppCompatActivity(), LifecycleOwner {
         }
         lifecycleScope.launch {
             viewModel.count.observe(this@OpeningActivity, Observer {
-                Log.e("jimmy", "jimmy3 - $it") // Jimmy todo its not reaching this point!
-            })
-        }
-        lifecycleScope.launch {
-            viewModel.jimmysLiveData.observe(this@OpeningActivity, Observer {
-                Log.e("jimmy", "jimmy3 - $it") // Jimmy todo its not reaching this point!
+                Log.e("jimmy", "jimmy1231233 - $it")
             })
         }
     }
