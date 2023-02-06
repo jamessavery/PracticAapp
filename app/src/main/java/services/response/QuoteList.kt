@@ -1,10 +1,10 @@
 package services.response
 
 data class QuoteList(
-    val count: Int,
-    val lastItemIndex: Int,
-    val page: Int,
-    val results: List<Result>,
-    val totalCount: Int,
-    val totalPages: Int
+    val count: Int? = null,
+    val lastItemIndex: Int? = null,
+    val page: Int? = null,
+    val results: List<Result>? = null,
+    val totalCount: Int? = null,
+    val totalPages: Int? = null
 )
