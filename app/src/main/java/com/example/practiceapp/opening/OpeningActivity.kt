@@ -1,6 +1,5 @@
 package com.example.practiceapp.opening
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -12,17 +11,19 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
+import com.example.practiceapp.PracticeApplication
 import com.example.practiceapp.R
 import com.example.practiceapp.databinding.ActivityOpeningBinding
-import com.example.practiceapp.secondScreen.SecondScreenActivity
-import com.example.practiceapp.secondScreen.SecondScreenFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 class OpeningActivity : AppCompatActivity(), LifecycleOwner {
+
+    @Inject
+    lateinit var openingViewModel: OpeningViewModel
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityOpeningBinding
@@ -34,6 +35,10 @@ class OpeningActivity : AppCompatActivity(), LifecycleOwner {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        //(applicationContext as PracticeApplication).appComponent.inject(this)
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
         binding = ActivityOpeningBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -41,7 +46,6 @@ class OpeningActivity : AppCompatActivity(), LifecycleOwner {
 
         setListeners()
         setUpObservers()
-        super.onCreate(savedInstanceState)
     }
 
     // @see https://medium.com/androiddevelopers/a-safer-way-to-collect-flows-from-android-uis-23080b1f8bda#:~:text=Use%20the%20Lifecycle.,the%20UI%20layer%20in%20Android.
@@ -57,23 +61,26 @@ class OpeningActivity : AppCompatActivity(), LifecycleOwner {
                     viewModel.practiceRx()
                 }
             }
-            secondScreenButton.setOnClickListener {
-                startSecondFrag()
+            launchSecondScreenButton.setOnClickListener {
+                launchSecondScreenAct()
+            }
+            setIconSecondScreenButton.setOnClickListener {
+                viewModel.sendTriggeredState()
             }
         }
     }
 
     // Todo should be in ViewModel..?
-    private fun startSecondFrag() {
-        //findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+    private fun launchSecondScreenAct() {
+        // FragmentManager is deprecated.. Use Navigation Compose!
+        // 1) Figure out how to use findNavController() .. Is this what Chrome navigation tabs were about..?
+        // https://medium.com/mindorks/dynamic-feature-modules-the-future-4bee124c0f1#:~:text=To%20add%20a%20dynamic%20feature,Feature%20Module%20and%20click%20Next.
 
-        //supportFragmentManager.beginTransaction().add(com.example.practiceapp.R.id.second_screen_activity, SecondScreenActivity()).commit()
+        val secondActivity = intent.setClassName(this, "com.example.secondscreenfeature.secondScreen.SecondScreenActivity") // https://proandroiddev.com/easy-navigation-in-a-multi-module-android-project-2374ecbaa0ae
+        startActivity(secondActivity)
 
-        // So issue seems that starting a frag, where that frag doesnt have an act, IT DOESNT WORK
-        // So to get previous code working (improve understanding) I gotta somehow tie my frag to an act..? Use new project NavigationTest to mimic how that does it!
-        // 1) Use NavigationTest to find way to attach secondFrag to an act then try supportFragmentManager() again!
-        // 2) Figure out how to use findNavController() .. Is this what Chrome navigation tabs were about..?
-        startActivity(Intent(this, SecondScreenActivity::class.java))
+//        Navigation.findNavController(view).navigate(R.id.nav_graph_actFirstActvity)
+
     }
 
     // @see https://medium.com/androiddevelopers/a-safer-way-to-collect-flows-from-android-uis-23080b1f8bda#:~:text=Use%20the%20Lifecycle.,the%20UI%20layer%20in%20Android.

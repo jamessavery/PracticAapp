@@ -17,10 +17,7 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Response
@@ -32,15 +29,21 @@ import services.response.QuoteList
 import services.response.Result
 import services.response.StopInfo
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 
-class OpeningViewModel() : ViewModel() {
+class OpeningViewModel @Inject constructor(
+//    private val userRepository: SendingToEmailResultEntity
+    ) : ViewModel() {
 
     private val _event: MutableSharedFlow<Event> = MutableSharedFlow()
     val event: SharedFlow<Event> = _event
 
     private val _loadingState: MutableStateFlow<LoadingState> = MutableStateFlow(LoadingState.Idle)
     val loadingState: StateFlow<LoadingState> = _loadingState
+
+    private val _secondScreenState: MutableStateFlow<SecondScreenState> = MutableStateFlow(SecondScreenState.Default)
+    val secondScreenState: StateFlow<SecondScreenState> = _secondScreenState
 
     lateinit var thisIs: String
 
@@ -59,33 +62,6 @@ class OpeningViewModel() : ViewModel() {
 
     fun getUpdatedCount() {
         count.value = (count.value)?.plus(1)
-    }
-
-    fun startSecondFrag() {
-
-    }
-
-    // TODO 1) Understand TFL, what is the response about..? Dont spend too much time on this but lets try and get some data on buses and what can be done
-    //  do so in the future to draw as a compose
-    //  2) Clean this shit up.. GEt rid of unneeded stuff!!! Like maybe keep counter  but also re-read all old URLs in comments to add comments here AND IN BOOK
-    suspend fun loadTfl(): MutableLiveData<Response<StopInfo>> = withContext(Dispatchers.IO) {
-        setLoading(true)
-
-        val result = tflApi.getStopInfo("490G00005781")
-
-        if (result.isSuccessful) {
-            Log.e(
-                "jimmy success", "${result.body()}"
-            ) // TODO "result" is services.response.StopInfo but most of it is null..? But at least detailed response from server works! Figure out wag1
-        } else {
-            Log.e("jimmy error1", "${result.body()}")
-            Log.e("jimmy error2", "${result.errorBody()}")
-        }
-
-        setLoading(false)
-
-        tflLiveData.postValue(result)
-        tflLiveData
     }
 
     suspend fun loadRxJimmy(): Observable<QuoteList>? {
@@ -143,6 +119,11 @@ class OpeningViewModel() : ViewModel() {
     sealed class LoadingState {
         object Idle : LoadingState()
         object Loading : LoadingState()
+    }
+
+    sealed class SecondScreenState() {
+        object Default : SecondScreenState()
+        object Triggered : SecondScreenState()
     }
 
     // RX Syntax reminder
@@ -340,22 +321,11 @@ class OpeningViewModel() : ViewModel() {
         println("Jimmy choochoochoo $it")
     }
 
+    fun sendTriggeredState() {
+        _secondScreenState.value = SecondScreenState.Triggered
+    }
 
 }
-
-
-//suspend fun loadJimmys(): MutableLiveData<List<String>> {
-//    Log.e("jimmy", "jimmy Starting call")
-//    setLoading(true) // This approach might now work
-//
-//    jimmysLiveData.postValue(listOf("Jimmy", "jimmy", "jimmy231"))
-//    delay(3000L) // Despite printing a toast, as long as this suspend func is loaded on background T, it'll save the toast for after this delay completes
-//
-//    setLoading(false)
-//
-//
-//    return jimmysLiveData
-//}
 
 //    suspend fun loadJimmys(): Response<QuoteList> = withContext(Dispatchers.IO) {
 //        setLoading(true)

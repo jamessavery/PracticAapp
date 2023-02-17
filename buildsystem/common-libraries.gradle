@@ -1,0 +1,43 @@
+dependencies {
+
+//    implementation project(":secondscreenfeature")
+
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
+    implementation("androidx.lifecycle:lifecycle-livedata-core-ktx:2.5.1")
+
+
+    implementation 'androidx.databinding:databinding-runtime:7.1.2'
+
+
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.fragment:fragment-ktx:1.5.4'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.1'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.4.1'
+
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-jackson:2.1.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
+
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.0' // Main RX lib
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0' // RX bindings for Android, for thread management
+    implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
+
+// Rx version of CallAdapter.Factory from Retrofit, used to make calls reactive
+
+//    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    testImplementation "junit:junit:4.13.2"
+    testImplementation "org.assertj:assertj-core:3.23.1"
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    implementation 'com.google.dagger:dagger-android:2.35.1'
+//    implementation 'com.google.dagger:dagger-android-support:2.20' // if you use the support libraries
+    implementation 'com.google.dagger:dagger-android-processor:2.20'
+    implementation 'com.google.dagger:dagger-compiler:2.20'
+}
+
