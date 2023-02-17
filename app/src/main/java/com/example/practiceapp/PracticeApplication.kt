@@ -35,8 +35,14 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideSomeSingleton(): StateSingleton {
+    fun provideStateSingleton(): StateSingleton {
         return StateSingletonImpl()
     }
+
+//    @Provides
+//    @Singleton
+//    fun provideSomeSingleton(ting: Boolean): Boolean {
+//        return ting
+//    }
 
 }

@@ -1,9 +1,11 @@
 package com.example.practiceapp.repo
 
-import kotlinx.coroutines.flow.Flow
+import androidx.lifecycle.MutableLiveData
 
 interface StateSingleton {
 
-    var isTriggered: Flow<Boolean>
+    fun setTriggeredTing(ting: String)
+
+    fun getTriggeredTing(): MutableLiveData<String>
 
 }

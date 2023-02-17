@@ -23,6 +23,8 @@ class SecondScreenActivity : AppCompatActivity(), LifecycleOwner {
     //private val openingViewModel: OpeningViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
         binding = ActivitySecondScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -48,7 +50,7 @@ class SecondScreenActivity : AppCompatActivity(), LifecycleOwner {
 //                    }
 //                }
             lifecycleScope.launchWhenCreated {
-                //viewModel.loadTfl()
+                viewModel.loadTfl()
             }
         }
     }

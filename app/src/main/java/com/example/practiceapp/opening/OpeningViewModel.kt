@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.practiceapp.model.SendingToEmailResultEntity
+import com.example.practiceapp.repo.StateSingleton
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.*
 import io.reactivex.rxjava3.core.Observable.interval
@@ -33,7 +34,7 @@ import javax.inject.Inject
 
 
 class OpeningViewModel @Inject constructor(
-//    private val userRepository: SendingToEmailResultEntity
+    private val userRepository: StateSingleton
     ) : ViewModel() {
 
     private val _event: MutableSharedFlow<Event> = MutableSharedFlow()
@@ -123,7 +124,7 @@ class OpeningViewModel @Inject constructor(
 
     sealed class SecondScreenState() {
         object Default : SecondScreenState()
-        object Triggered : SecondScreenState()
+        class Triggered(something: String) : SecondScreenState()
     }
 
     // RX Syntax reminder
@@ -322,7 +323,8 @@ class OpeningViewModel @Inject constructor(
     }
 
     fun sendTriggeredState() {
-        _secondScreenState.value = SecondScreenState.Triggered
+        userRepository.setTriggeredTing("JAMES")
+        _secondScreenState.value = SecondScreenState.Triggered("TESTING JIMMY")
     }
 
 }

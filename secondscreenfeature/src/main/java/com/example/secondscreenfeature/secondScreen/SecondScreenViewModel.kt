@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.practiceapp.repo.StateSingleton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +21,7 @@ import services.response.StopInfo
 import javax.inject.Inject
 
 
-class SecondScreenViewModel @Inject constructor() : ViewModel() {
+class SecondScreenViewModel @Inject constructor(val userRepository: StateSingleton) : ViewModel() {
 
     private val _event: MutableSharedFlow<Event> = MutableSharedFlow()
     val event: SharedFlow<Event> = _event
@@ -66,6 +67,8 @@ class SecondScreenViewModel @Inject constructor() : ViewModel() {
         }
 
         setLoading(false)
+
+        Log.e("Jimmy", "${userRepository.getTriggeredTing()}")
 
         tflLiveData.postValue(result)
         tflLiveData

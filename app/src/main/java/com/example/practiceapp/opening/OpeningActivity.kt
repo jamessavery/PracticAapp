@@ -35,9 +35,7 @@ class OpeningActivity : AppCompatActivity(), LifecycleOwner {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-//        (applicationContext as PracticeApplication).appComponent.inject(this)
+        (applicationContext as PracticeApplication).appComponent.inject(this)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
         binding = ActivityOpeningBinding.inflate(layoutInflater)
@@ -46,6 +44,8 @@ class OpeningActivity : AppCompatActivity(), LifecycleOwner {
 
         setListeners()
         setUpObservers()
+
+        super.onCreate(savedInstanceState)
     }
 
     // @see https://medium.com/androiddevelopers/a-safer-way-to-collect-flows-from-android-uis-23080b1f8bda#:~:text=Use%20the%20Lifecycle.,the%20UI%20layer%20in%20Android.
