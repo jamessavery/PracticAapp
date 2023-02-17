@@ -37,7 +37,7 @@ class OpeningActivity : AppCompatActivity(), LifecycleOwner {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //(applicationContext as PracticeApplication).appComponent.inject(this)
+//        (applicationContext as PracticeApplication).appComponent.inject(this)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
         binding = ActivityOpeningBinding.inflate(layoutInflater)

@@ -2,6 +2,8 @@ package com.example.practiceapp
 
 import android.app.Application
 import com.example.practiceapp.opening.OpeningActivity
+import com.example.practiceapp.repo.StateSingleton
+import com.example.practiceapp.repo.StateSingletonImpl
 import dagger.Component
 import dagger.Module
 import dagger.Provides
@@ -9,7 +11,7 @@ import javax.inject.Singleton
 
 class PracticeApplication : Application() {
 
-    //val appComponent = DaggerApplicationComponent.create()
+    val appComponent = DaggerApplicationComponent.create()
 
     override fun onCreate() {
         super.onCreate()
@@ -30,11 +32,11 @@ interface ApplicationComponent {
 
 @Module
 class AppModule {
-//
-//    @Provides
-//    @Singleton
-//    fun provideSomeSingleton() {
-//
-//    }
+
+    @Provides
+    @Singleton
+    fun provideSomeSingleton(): StateSingleton {
+        return StateSingletonImpl()
+    }
 
 }

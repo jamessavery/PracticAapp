@@ -1,3 +1,5 @@
+apply plugin: 'kotlin-kapt' // report statistics on the number of generated files for each annotation processor
+
 dependencies {
 
 //    implementation project(":secondscreenfeature")
@@ -37,7 +39,7 @@ dependencies {
 
     implementation 'com.google.dagger:dagger-android:2.35.1'
 //    implementation 'com.google.dagger:dagger-android-support:2.20' // if you use the support libraries
-    implementation 'com.google.dagger:dagger-android-processor:2.20'
-    implementation 'com.google.dagger:dagger-compiler:2.20'
+    kapt 'com.google.dagger:dagger-android-processor:2.20'
+    kapt 'com.google.dagger:dagger-compiler:2.20'
 }
 

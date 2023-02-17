@@ -17,9 +17,10 @@ import services.RetrofitHelper
 import services.TflApi
 import services.response.QuoteList
 import services.response.StopInfo
+import javax.inject.Inject
 
 
-class SecondScreenViewModel() : ViewModel() {
+class SecondScreenViewModel @Inject constructor() : ViewModel() {
 
     private val _event: MutableSharedFlow<Event> = MutableSharedFlow()
     val event: SharedFlow<Event> = _event
