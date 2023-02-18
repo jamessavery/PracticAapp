@@ -34,7 +34,7 @@ import javax.inject.Inject
 
 
 class OpeningViewModel @Inject constructor(
-    private val userRepository: StateSingleton
+    //private val userRepository: StateSingleton
     ) : ViewModel() {
 
     private val _event: MutableSharedFlow<Event> = MutableSharedFlow()
@@ -323,7 +323,7 @@ class OpeningViewModel @Inject constructor(
     }
 
     fun sendTriggeredState() {
-        userRepository.setTriggeredTing("JAMES")
+      //  userRepository.setTriggeredTing("JAMES")
         _secondScreenState.value = SecondScreenState.Triggered("TESTING JIMMY")
     }
 

@@ -35,7 +35,7 @@ class OpeningActivity : AppCompatActivity(), LifecycleOwner {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (applicationContext as PracticeApplication).appComponent.inject(this)
+        //(applicationContext as PracticeApplication).appComponent.inject(this)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
         binding = ActivityOpeningBinding.inflate(layoutInflater)

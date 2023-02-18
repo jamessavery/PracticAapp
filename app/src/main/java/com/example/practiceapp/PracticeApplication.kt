@@ -19,12 +19,15 @@ class PracticeApplication : Application() {
 
 }
 
+//@Component(modules = [SecondScreenModule::class])
 @Component
 interface ApplicationComponent {
 
     // Tells Dagger that OpeningActivity requests dependencies, so the graph needs to
     // provide/satisfy them to the fields ((F injection?)) that LoginActivity is requesting
     fun inject(activity: OpeningActivity)
+
+    //fun SecondScreenComponent(): SecondScreenComponent.Factory
 
 //    fun inject(activity: SecondScreenActivity)
 

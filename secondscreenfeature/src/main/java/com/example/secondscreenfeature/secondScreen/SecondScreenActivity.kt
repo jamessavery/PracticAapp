@@ -14,8 +14,8 @@ import javax.inject.Inject
 
 class SecondScreenActivity : AppCompatActivity(), LifecycleOwner {
 
-    @Inject
-    lateinit var openingViewModel: SecondScreenViewModel
+//    @Inject
+//    lateinit var openingViewModel: SecondScreenViewModel
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivitySecondScreenBinding
@@ -23,7 +23,7 @@ class SecondScreenActivity : AppCompatActivity(), LifecycleOwner {
     //private val openingViewModel: OpeningViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
+        //(applicationContext as PracticeApplication).appComponent.inject(this)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
         binding = ActivitySecondScreenBinding.inflate(layoutInflater)
@@ -50,7 +50,7 @@ class SecondScreenActivity : AppCompatActivity(), LifecycleOwner {
 //                    }
 //                }
             lifecycleScope.launchWhenCreated {
-                viewModel.loadTfl()
+//                viewModel.loadTfl()
             }
         }
     }

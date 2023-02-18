@@ -2,8 +2,6 @@ apply plugin: 'kotlin-kapt' // report statistics on the number of generated file
 
 dependencies {
 
-//    implementation project(":secondscreenfeature")
-
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
     implementation("androidx.lifecycle:lifecycle-livedata-core-ktx:2.5.1")
 
