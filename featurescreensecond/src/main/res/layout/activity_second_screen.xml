@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".secondScreen.SecondScreenActivity"
+    tools:context="com.example.featurescreensecond.SecondScreenActivity"
     android:id="@+id/second_screen_activity">
 
     <com.google.android.material.appbar.AppBarLayout

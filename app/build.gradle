@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.practiceapp"
-        minSdk 26
+        minSdk 31
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -38,12 +38,11 @@ android {
         dataBinding true
         viewBinding true
     }
-    dynamicFeatures = [':secondscreenfeature']
 
 }
 
 dependencies {
-    //implementation project(":secondscreenfeature") // FF ALLOWED APP ACCESS TO FEATS
+    implementation project(":featurescreensecond")
 
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
     implementation("androidx.lifecycle:lifecycle-livedata-core-ktx:2.5.1")

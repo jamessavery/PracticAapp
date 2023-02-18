@@ -1,24 +1,19 @@
-package com.example.secondscreenfeature.secondScreen
+package com.example.featurescreensecond
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 //import com.example.practiceapp.repo.StateSingleton
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import retrofit2.Response
 //import services.QuotesApi
 //import services.RetrofitHelper
 //import services.TflApi
 //import services.response.QuoteList
 //import services.response.StopInfo
-import javax.inject.Inject
 
 // @Inject constructor
 // (val userRepository: StateSingleton)

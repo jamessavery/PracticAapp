@@ -1,4 +1,4 @@
-//package com.example.secondscreenfeature.secondScreen
+package com.example.featurescreensecond//package com.example.secondscreenfeature.secondScreen
 //
 //import android.os.Bundle
 //import androidx.fragment.app.Fragment

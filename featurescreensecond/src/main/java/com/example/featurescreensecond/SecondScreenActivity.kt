@@ -1,4 +1,4 @@
-package com.example.secondscreenfeature.secondScreen
+package com.example.featurescreensecond
 
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -7,9 +7,8 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.ui.AppBarConfiguration
-import com.example.secondscreenfeature.databinding.ActivitySecondScreenBinding
+import com.example.featurescreensecond.databinding.ActivitySecondScreenBinding
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 
 class SecondScreenActivity : AppCompatActivity(), LifecycleOwner {
