@@ -9,12 +9,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.ui.AppBarConfiguration
 import com.example.featurescreensecond.databinding.ActivitySecondScreenBinding
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 class SecondScreenActivity : AppCompatActivity(), LifecycleOwner {
 
-//    @Inject
-//    lateinit var openingViewModel: SecondScreenViewModel
+    @Inject
+    lateinit var openingViewModel: SecondScreenViewModel
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivitySecondScreenBinding

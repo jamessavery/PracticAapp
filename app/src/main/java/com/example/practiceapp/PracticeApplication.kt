@@ -1,6 +1,7 @@
 package com.example.practiceapp
 
 import android.app.Application
+import com.example.featurescreensecond.SecondScreenActivity
 import com.example.practiceapp.opening.OpeningActivity
 import com.example.practiceapp.repo.StateSingleton
 import com.example.practiceapp.repo.StateSingletonImpl
@@ -27,9 +28,9 @@ interface ApplicationComponent {
     // provide/satisfy them to the fields ((F injection?)) that LoginActivity is requesting
     fun inject(activity: OpeningActivity)
 
-    //fun SecondScreenComponent(): SecondScreenComponent.Factory
+    fun inject(activity: SecondScreenActivity)
 
-//    fun inject(activity: SecondScreenActivity)
+//    fun SecondScreenComponent(): SecondScreenComponent.Factory
 
 }
 

@@ -9,15 +9,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+
 //import services.QuotesApi
 //import services.RetrofitHelper
 //import services.TflApi
 //import services.response.QuoteList
 //import services.response.StopInfo
 
-// @Inject constructor
-// (val userRepository: StateSingleton)
-class SecondScreenViewModel() : ViewModel() {
+//
+//
+class SecondScreenViewModel @Inject constructor(val userRepository: StateSingleton) : ViewModel() {
 
     private val _event: MutableSharedFlow<Event> = MutableSharedFlow()
     val event: SharedFlow<Event> = _event
