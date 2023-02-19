@@ -3,8 +3,6 @@ package com.example.practiceapp
 import android.app.Application
 import com.example.featurescreensecond.SecondScreenActivity
 import com.example.practiceapp.opening.OpeningActivity
-import com.example.practiceapp.repo.StateSingleton
-import com.example.practiceapp.repo.StateSingletonImpl
 import dagger.Component
 import dagger.Module
 import dagger.Provides
@@ -21,7 +19,7 @@ class PracticeApplication : Application() {
 }
 
 //@Component(modules = [SecondScreenModule::class])
-@Component
+@Component(modules = [AppModule::class])
 interface ApplicationComponent {
 
     // Tells Dagger that OpeningActivity requests dependencies, so the graph needs to
@@ -38,9 +36,9 @@ interface ApplicationComponent {
 class AppModule {
 
     @Provides
-    @Singleton
-    fun provideStateSingleton(): StateSingleton {
-        return StateSingletonImpl()
+//    @Singleton // THIS CANT BE PUT HERE?  https://stackoverflow.com/questions/53876311/error-dagger-incompatiblyscopedbindings-unscoped-may-not-reference-scoped-b
+    fun provideStateSingleton(): com.example.data.StateSingletonImpl {
+        return com.example.data.StateSingletonImpl()
     }
 
 //    @Provides

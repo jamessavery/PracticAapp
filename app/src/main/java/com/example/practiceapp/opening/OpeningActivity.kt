@@ -76,7 +76,7 @@ class OpeningActivity : AppCompatActivity(), LifecycleOwner {
         // 1) Figure out how to use findNavController() .. Is this what Chrome navigation tabs were about..?
         // https://medium.com/mindorks/dynamic-feature-modules-the-future-4bee124c0f1#:~:text=To%20add%20a%20dynamic%20feature,Feature%20Module%20and%20click%20Next.
 
-        val secondActivity = intent.setClassName(this, "com.example.secondscreenfeature.secondScreen.SecondScreenActivity") // https://proandroiddev.com/easy-navigation-in-a-multi-module-android-project-2374ecbaa0ae
+        val secondActivity = intent.setClassName(this, "com.example.featurescreensecond.SecondScreenActivity") // https://proandroiddev.com/easy-navigation-in-a-multi-module-android-project-2374ecbaa0ae
         startActivity(secondActivity)
 
 //        Navigation.findNavController(view).navigate(R.id.nav_graph_actFirstActvity)

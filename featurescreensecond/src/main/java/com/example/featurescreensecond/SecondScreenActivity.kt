@@ -15,7 +15,7 @@ import javax.inject.Inject
 class SecondScreenActivity : AppCompatActivity(), LifecycleOwner {
 
     @Inject
-    lateinit var openingViewModel: SecondScreenViewModel
+    lateinit var secondScreenVM: SecondScreenViewModel
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivitySecondScreenBinding
@@ -49,6 +49,7 @@ class SecondScreenActivity : AppCompatActivity(), LifecycleOwner {
 //                        binding.secondScreenFragmentContainer.text = "TRIGGERED"
 //                    }
 //                }
+            // COLLECT ABOVE FROM SINGLETON
             lifecycleScope.launchWhenCreated {
 //                viewModel.loadTfl()
             }

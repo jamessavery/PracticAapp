@@ -5,22 +5,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.practiceapp.model.SendingToEmailResultEntity
-import com.example.practiceapp.repo.StateSingleton
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.*
-import io.reactivex.rxjava3.core.Observable.interval
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 
 import io.reactivex.rxjava3.functions.BiFunction
-import io.reactivex.rxjava3.internal.operators.observable.ObservableBuffer
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.PublishSubject
 
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import retrofit2.Response
 import services.QuotesApi
 import services.RetrofitHelper

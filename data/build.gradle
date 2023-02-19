@@ -1,24 +1,20 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
 }
-
-apply plugin: 'kotlin-kapt'
 
 apply from: "${rootDir}/buildsystem/common-libraries.gradle"
 
 android {
-    namespace 'com.example.practiceapp'
+    namespace 'com.example.data'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.practiceapp"
         minSdk 31
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
@@ -34,14 +30,6 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    buildFeatures {
-        dataBinding true
-        viewBinding true
-    }
-
 }
 
-dependencies {
-    implementation project(":featurescreensecond")
-    implementation project(path: ':data')
-}
+dependencies {}

@@ -1,9 +1,10 @@
-package com.example.practiceapp.repo
+package com.example.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.flow.flow
+import javax.inject.Singleton
 
+@Singleton
 class StateSingletonImpl : StateSingleton {
 
     private val _actionLiveData = MutableLiveData<String>()

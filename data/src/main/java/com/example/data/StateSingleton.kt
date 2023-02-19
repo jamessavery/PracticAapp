@@ -1,4 +1,4 @@
-package com.example.practiceapp.repo
+package com.example.data
 
 import androidx.lifecycle.MutableLiveData
 

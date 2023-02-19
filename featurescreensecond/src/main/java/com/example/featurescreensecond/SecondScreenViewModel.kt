@@ -3,6 +3,8 @@ package com.example.featurescreensecond
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.data.StateSingleton
+import com.example.data.StateSingletonImpl
 //import com.example.practiceapp.repo.StateSingleton
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +21,9 @@ import javax.inject.Inject
 
 //
 //
-class SecondScreenViewModel @Inject constructor(val userRepository: StateSingleton) : ViewModel() {
+class SecondScreenViewModel @Inject constructor(
+   val userRepository: StateSingletonImpl
+    ) : ViewModel() {
 
     private val _event: MutableSharedFlow<Event> = MutableSharedFlow()
     val event: SharedFlow<Event> = _event
