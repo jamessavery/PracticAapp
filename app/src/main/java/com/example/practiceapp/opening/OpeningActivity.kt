@@ -7,11 +7,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.*
 import androidx.navigation.ui.AppBarConfiguration
+import com.example.data.StateSingletonImpl
+import com.example.featurescreensecond.SecondScreenViewModel
 import com.example.practiceapp.PracticeApplication
 import com.example.practiceapp.R
 import com.example.practiceapp.databinding.ActivityOpeningBinding
@@ -25,9 +24,20 @@ class OpeningActivity : AppCompatActivity(), LifecycleOwner {
     @Inject
     lateinit var openingViewModel: OpeningViewModel
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+//    @Inject
+//    lateinit var stateSingletonImpl: StateSingletonImpl
+
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityOpeningBinding
-    private val viewModel: OpeningViewModel by viewModels()
+
+    //    private val viewModel: OpeningViewModel by viewModels()
+//    private val viewModel: OpeningViewModel by viewModels {
+//        OpeningViewModel.provideFactory((applicationContext as PracticeApplication).stateSingletonImpl, this)
+//    }
+    private lateinit var viewModel: OpeningViewModel
 
     private var isExpanded: Boolean = false
 
@@ -36,16 +46,17 @@ class OpeningActivity : AppCompatActivity(), LifecycleOwner {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (applicationContext as PracticeApplication).appComponent.inject(this)
+        super.onCreate(savedInstanceState)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
         binding = ActivityOpeningBinding.inflate(layoutInflater)
         setContentView(binding.root)
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetView)
 
+        viewModel = ViewModelProviders.of(this, viewModelFactory)[OpeningViewModel::class.java]
+
         setListeners()
         setUpObservers()
-
-        super.onCreate(savedInstanceState)
     }
 
     // @see https://medium.com/androiddevelopers/a-safer-way-to-collect-flows-from-android-uis-23080b1f8bda#:~:text=Use%20the%20Lifecycle.,the%20UI%20layer%20in%20Android.
@@ -76,7 +87,10 @@ class OpeningActivity : AppCompatActivity(), LifecycleOwner {
         // 1) Figure out how to use findNavController() .. Is this what Chrome navigation tabs were about..?
         // https://medium.com/mindorks/dynamic-feature-modules-the-future-4bee124c0f1#:~:text=To%20add%20a%20dynamic%20feature,Feature%20Module%20and%20click%20Next.
 
-        val secondActivity = intent.setClassName(this, "com.example.featurescreensecond.SecondScreenActivity") // https://proandroiddev.com/easy-navigation-in-a-multi-module-android-project-2374ecbaa0ae
+        val secondActivity = intent.setClassName(
+            this,
+            "com.example.featurescreensecond.SecondScreenActivity"
+        ) // https://proandroiddev.com/easy-navigation-in-a-multi-module-android-project-2374ecbaa0ae
         startActivity(secondActivity)
 
 //        Navigation.findNavController(view).navigate(R.id.nav_graph_actFirstActvity)

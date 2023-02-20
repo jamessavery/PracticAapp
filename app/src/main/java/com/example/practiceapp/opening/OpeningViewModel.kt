@@ -1,10 +1,12 @@
 package com.example.practiceapp.opening
 
+import android.os.Bundle
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.practiceapp.model.SendingToEmailResultEntity
+import androidx.lifecycle.*
+import androidx.savedstate.SavedStateRegistryOwner
+import com.example.data.StateSingleton
+import com.example.data.StateSingletonImpl
+import com.example.data.model.SendingToEmailResultEntity
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.*
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -17,19 +19,20 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import retrofit2.Response
-import services.QuotesApi
-import services.RetrofitHelper
-import services.RxRetrofitHelper
-import services.TflApi
-import services.response.QuoteList
-import services.response.Result
-import services.response.StopInfo
+import com.example.data.services.QuotesApi
+import com.example.data.services.RetrofitHelper
+import com.example.data.services.RxRetrofitHelper
+import com.example.data.services.TflApi
+import com.example.data.services.response.QuoteList
+import com.example.data.services.response.Result
+import com.example.data.services.response.StopInfo
+import com.example.featurescreensecond.SecondScreenViewModel
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
 class OpeningViewModel @Inject constructor(
-    //private val userRepository: StateSingleton
+    private val userRepository: StateSingletonImpl
     ) : ViewModel() {
 
     private val _event: MutableSharedFlow<Event> = MutableSharedFlow()
@@ -120,6 +123,25 @@ class OpeningViewModel @Inject constructor(
     sealed class SecondScreenState() {
         object Default : SecondScreenState()
         class Triggered(something: String) : SecondScreenState()
+    }
+
+    // Define ViewModel factory in a companion object
+    companion object {
+        fun provideFactory(
+            myRepository: StateSingletonImpl,
+            owner: SavedStateRegistryOwner,
+            defaultArgs: Bundle? = null,
+        ): AbstractSavedStateViewModelFactory =
+            object : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
+                @Suppress("UNCHECKED_CAST")
+                override fun <T : ViewModel> create(
+                    key: String,
+                    modelClass: Class<T>,
+                    handle: SavedStateHandle
+                ): T {
+                    return OpeningViewModel(myRepository) as T
+                }
+            }
     }
 
     // RX Syntax reminder
@@ -310,7 +332,7 @@ class OpeningViewModel @Inject constructor(
     }
 
     private fun removeThis(): Observable<QuoteList> {
-        return Observable.just(QuoteList(results = listOf(services.response.Result("ASD", "ASD"))))
+        return Observable.just(QuoteList(results = listOf(Result("ASD", "ASD"))))
     }
 
     private fun updateTheTing(it: Result) {
@@ -318,8 +340,8 @@ class OpeningViewModel @Inject constructor(
     }
 
     fun sendTriggeredState() {
-      //  userRepository.setTriggeredTing("JAMES")
-        _secondScreenState.value = SecondScreenState.Triggered("TESTING JIMMY")
+        userRepository.setTriggeredTing("JAMES WAZ HERE")
+        _secondScreenState.value = SecondScreenState.Triggered("TESTING JIMMY") // THis doesnt work, activity doesnt exist yet so data doesnt propagate/get chance to be collected
     }
 
 }

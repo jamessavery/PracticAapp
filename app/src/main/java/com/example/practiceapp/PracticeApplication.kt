@@ -1,24 +1,32 @@
 package com.example.practiceapp
 
 import android.app.Application
+import androidx.lifecycle.ViewModelProvider
+import com.example.data.StateSingletonImpl
 import com.example.featurescreensecond.SecondScreenActivity
+import com.example.featurescreensecond.SecondScreenViewModel
+import com.example.featurescreensecond.SecondScreenViewModel_Factory
 import com.example.practiceapp.opening.OpeningActivity
+import com.example.practiceapp.utils.ViewModelFactory
 import dagger.Component
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
+import dagger.android.AndroidInjector
+import dagger.android.DaggerApplication
 
-class PracticeApplication : Application() {
+class PracticeApplication : DaggerApplication() {
 
     val appComponent = DaggerApplicationComponent.create()
 
-    override fun onCreate() {
-        super.onCreate()
+    lateinit var stateSingletonImpl: StateSingletonImpl
+
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
+        TODO("Not yet implemented")
     }
 
 }
 
-//@Component(modules = [SecondScreenModule::class])
+//, SecondScreenModule::class
 @Component(modules = [AppModule::class])
 interface ApplicationComponent {
 
@@ -28,6 +36,8 @@ interface ApplicationComponent {
 
     fun inject(activity: SecondScreenActivity)
 
+//    fun inject(practiceApplication: PracticeApplication)
+
 //    fun SecondScreenComponent(): SecondScreenComponent.Factory
 
 }
@@ -36,15 +46,8 @@ interface ApplicationComponent {
 class AppModule {
 
     @Provides
-//    @Singleton // THIS CANT BE PUT HERE?  https://stackoverflow.com/questions/53876311/error-dagger-incompatiblyscopedbindings-unscoped-may-not-reference-scoped-b
     fun provideStateSingleton(): com.example.data.StateSingletonImpl {
         return com.example.data.StateSingletonImpl()
     }
-
-//    @Provides
-//    @Singleton
-//    fun provideSomeSingleton(ting: Boolean): Boolean {
-//        return ting
-//    }
 
 }

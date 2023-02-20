@@ -1,7 +1,6 @@
-//package com.example.secondscreenfeature.secondScreen.di
+//package com.example.featurescreensecond.di
 //
 //import com.example.featurescreensecond.SecondScreenActivity
-//import dagger.Component
 //import dagger.Subcomponent
 //
 //@Subcomponent
