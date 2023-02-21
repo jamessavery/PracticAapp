@@ -2,6 +2,7 @@ package com.example.featurescreensecond
 
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.LifecycleOwner
@@ -19,8 +20,8 @@ class SecondScreenActivity : AppCompatActivity(), LifecycleOwner {
     @Inject
     lateinit var secondScreenViewModel: SecondScreenViewModel
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+//    @Inject
+//    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivitySecondScreenBinding
@@ -30,12 +31,16 @@ class SecondScreenActivity : AppCompatActivity(), LifecycleOwner {
 //        SecondScreenViewModel.provideFactory(stateSingletonImpl, this)
 //}
 
-    //private val openingViewModel: OpeningViewModel by viewModels()
+    private val openingViewModel: SecondScreenViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (applicationContext as PracticeApplication).appComponent.inject(this)
+        //(applicationContext as PracticeApplication).appComponent.inject(this)
 //        SecondScreenComponent.factory().create(appComponent).inject(this)
         //(applicationContext as PracticeApplication).appComponent.inject(this)
+//        injector.inject(this)
+//        val injector = applicationContext.
+//        Injector injector = (Injector)getApplicationContext();
+//        injector.inject(this)
         super.onCreate(savedInstanceState)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -43,7 +48,7 @@ class SecondScreenActivity : AppCompatActivity(), LifecycleOwner {
         setContentView(binding.root)
 
         // TODO deprecated
-        val vm = ViewModelProviders.of(this, viewModelFactory)[SecondScreenViewModel::class.java]
+//        val vm = ViewModelProviders.of(this, viewModelFactory)[SecondScreenViewModel::class.java]
 
         setupListeners()
         setupObservers()

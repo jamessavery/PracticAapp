@@ -1,33 +1,21 @@
 package com.example.practiceapp
 
 import android.app.Application
-import androidx.lifecycle.ViewModelProvider
 import com.example.data.StateSingletonImpl
 import com.example.featurescreensecond.SecondScreenActivity
-import com.example.featurescreensecond.SecondScreenViewModel
-import com.example.featurescreensecond.SecondScreenViewModel_Factory
 import com.example.practiceapp.opening.OpeningActivity
-import com.example.practiceapp.utils.ViewModelFactory
 import dagger.Component
 import dagger.Module
 import dagger.Provides
-import dagger.android.AndroidInjector
-import dagger.android.DaggerApplication
 
-class PracticeApplication : DaggerApplication() {
+class PracticeApplication : Application() {
 
     val appComponent = DaggerApplicationComponent.create()
-
-    lateinit var stateSingletonImpl: StateSingletonImpl
-
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        TODO("Not yet implemented")
-    }
 
 }
 
 //, SecondScreenModule::class
-@Component(modules = [AppModule::class])
+@Component(modules = [AppModule::class, SecondScreenModule::class])
 interface ApplicationComponent {
 
     // Tells Dagger that OpeningActivity requests dependencies, so the graph needs to

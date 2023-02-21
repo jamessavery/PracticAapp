@@ -24,8 +24,8 @@ class OpeningActivity : AppCompatActivity(), LifecycleOwner {
     @Inject
     lateinit var openingViewModel: OpeningViewModel
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+//    @Inject
+//    lateinit var viewModelFactory: ViewModelProvider.Factory
 
 //    @Inject
 //    lateinit var stateSingletonImpl: StateSingletonImpl
@@ -33,11 +33,11 @@ class OpeningActivity : AppCompatActivity(), LifecycleOwner {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityOpeningBinding
 
-    //    private val viewModel: OpeningViewModel by viewModels()
+        private val viewModel: OpeningViewModel by viewModels()
 //    private val viewModel: OpeningViewModel by viewModels {
 //        OpeningViewModel.provideFactory((applicationContext as PracticeApplication).stateSingletonImpl, this)
 //    }
-    private lateinit var viewModel: OpeningViewModel
+//    private lateinit var viewModel: OpeningViewModel
 
     private var isExpanded: Boolean = false
 
@@ -53,7 +53,7 @@ class OpeningActivity : AppCompatActivity(), LifecycleOwner {
         setContentView(binding.root)
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetView)
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory)[OpeningViewModel::class.java]
+        //viewModel = ViewModelProviders.of(this, viewModelFactory)[OpeningViewModel::class.java]
 
         setListeners()
         setUpObservers()
