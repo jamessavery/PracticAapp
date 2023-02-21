@@ -32,7 +32,7 @@ import javax.inject.Inject
 
 
 class OpeningViewModel @Inject constructor(
-    private val userRepository: StateSingletonImpl
+//    private val userRepository: StateSingletonImpl
     ) : ViewModel() {
 
     private val _event: MutableSharedFlow<Event> = MutableSharedFlow()
@@ -127,21 +127,21 @@ class OpeningViewModel @Inject constructor(
 
     // Define ViewModel factory in a companion object
     companion object {
-        fun provideFactory(
-            myRepository: StateSingletonImpl,
-            owner: SavedStateRegistryOwner,
-            defaultArgs: Bundle? = null,
-        ): AbstractSavedStateViewModelFactory =
-            object : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel> create(
-                    key: String,
-                    modelClass: Class<T>,
-                    handle: SavedStateHandle
-                ): T {
-                    return OpeningViewModel(myRepository) as T
-                }
-            }
+//        fun provideFactory(
+//            myRepository: StateSingletonImpl,
+//            owner: SavedStateRegistryOwner,
+//            defaultArgs: Bundle? = null,
+//        ): AbstractSavedStateViewModelFactory =
+//            object : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
+//                @Suppress("UNCHECKED_CAST")
+//                override fun <T : ViewModel> create(
+//                    key: String,
+//                    modelClass: Class<T>,
+//                    handle: SavedStateHandle
+//                ): T {
+//                    return OpeningViewModel(myRepository) as T
+//                }
+//            }
     }
 
     // RX Syntax reminder
@@ -340,8 +340,8 @@ class OpeningViewModel @Inject constructor(
     }
 
     fun sendTriggeredState() {
-        userRepository.setTriggeredTing("JAMES WAZ HERE")
-        _secondScreenState.value = SecondScreenState.Triggered("TESTING JIMMY") // THis doesnt work, activity doesnt exist yet so data doesnt propagate/get chance to be collected
+//        userRepository.setTriggeredTing("JAMES WAZ HERE")
+        _secondScreenState.value  = SecondScreenState.Triggered("TESTING JIMMY") // THis doesnt work, activity doesnt exist yet so data doesnt propagate/get chance to be collected
     }
 
 }

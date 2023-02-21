@@ -3,6 +3,7 @@ package com.example.practiceapp
 import android.app.Application
 import com.example.data.StateSingletonImpl
 import com.example.featurescreensecond.SecondScreenActivity
+import com.example.featurescreensecond.di.SecondScreenComponent
 import com.example.practiceapp.opening.OpeningActivity
 import dagger.Component
 import dagger.Module
@@ -26,7 +27,7 @@ interface ApplicationComponent {
 
 //    fun inject(practiceApplication: PracticeApplication)
 
-//    fun SecondScreenComponent(): SecondScreenComponent.Factory
+//    fun secondScreenComponent(): SecondScreenComponent.Factory
 
 }
 
@@ -37,5 +38,10 @@ class AppModule {
     fun provideStateSingleton(): com.example.data.StateSingletonImpl {
         return com.example.data.StateSingletonImpl()
     }
+
+//    @Provides
+//    fun provideViewModelFactory(): ViewModelFactory {
+//        return ViewModelFactory()
+//    }
 
 }
