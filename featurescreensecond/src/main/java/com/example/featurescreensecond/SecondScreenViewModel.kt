@@ -26,7 +26,7 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class SecondScreenViewModel @Inject constructor(
-   val userRepository: StateSingletonImpl
+   //val userRepository: StateSingletonImpl
     ) : ViewModel() {
 
     private val _event: MutableSharedFlow<Event> = MutableSharedFlow()
@@ -72,7 +72,7 @@ class SecondScreenViewModel @Inject constructor(
 
         setLoading(false)
 
-        Log.e("Jimmy", "${userRepository.getTriggeredTing()}")
+//        Log.e("Jimmy", "${userRepository.getTriggeredTing()}")
 
         tflLiveData.postValue(result)
         tflLiveData
@@ -99,30 +99,30 @@ class SecondScreenViewModel @Inject constructor(
     }
 
     // Define ViewModel factory in a companion object
-    companion object {
-        fun provideFactory(
-            myRepository: StateSingletonImpl,
-            owner: SavedStateRegistryOwner,
-            defaultArgs: Bundle? = null,
-        ): AbstractSavedStateViewModelFactory =
-            object : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel> create(
-                    key: String,
-                    modelClass: Class<T>,
-                    handle: SavedStateHandle
-                ): T {
-                    return SecondScreenViewModel(myRepository) as T
-                }
-            }
-
-        // Shorter version..?
-        class ViewModelFactory(private val counter: Int) : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return SecondScreenViewModel(StateSingletonImpl()) as T
-            }
-        }
-    }
+//    companion object {
+//        fun provideFactory(
+//            myRepository: StateSingletonImpl,
+//            owner: SavedStateRegistryOwner,
+//            defaultArgs: Bundle? = null,
+//        ): AbstractSavedStateViewModelFactory =
+//            object : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
+//                @Suppress("UNCHECKED_CAST")
+//                override fun <T : ViewModel> create(
+//                    key: String,
+//                    modelClass: Class<T>,
+//                    handle: SavedStateHandle
+//                ): T {
+//                    return SecondScreenViewModel(myRepository) as T
+//                }
+//            }
+//
+//        // Shorter version..?
+//        class ViewModelFactory(private val counter: Int) : ViewModelProvider.Factory {
+//            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//                return SecondScreenViewModel(StateSingletonImpl()) as T
+//            }
+//        }
+//    }
 
 }
 

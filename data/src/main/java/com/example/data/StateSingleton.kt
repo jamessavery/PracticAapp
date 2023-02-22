@@ -6,6 +6,6 @@ interface StateSingleton {
 
     fun setTriggeredTing(ting: String)
 
-    fun getTriggeredTing(): MutableLiveData<String>
+    fun getTriggeredTing(): String
 
 }

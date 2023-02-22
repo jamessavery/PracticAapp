@@ -4,18 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import javax.inject.Singleton
 
-@Singleton
 class StateSingletonImpl : StateSingleton {
 
     private val _actionLiveData = MutableLiveData<String>()
     val actionLiveData: LiveData<String> = _actionLiveData
 
+    private var singletonVariable: String = "null"
+
     override fun setTriggeredTing(ting: String) {
-        _actionLiveData.postValue(ting)
+        singletonVariable = ting
     }
 
-    override fun getTriggeredTing(): MutableLiveData<String> {
-        return _actionLiveData
+    override fun getTriggeredTing(): String {
+        return singletonVariable
     }
 
 }

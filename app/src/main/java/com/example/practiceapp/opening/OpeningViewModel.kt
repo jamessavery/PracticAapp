@@ -341,6 +341,7 @@ class OpeningViewModel @Inject constructor(
 
     fun sendTriggeredState() {
 //        userRepository.setTriggeredTing("JAMES WAZ HERE")
+//        Log.e("Jimmy", "JIMMY SET TRIGGERED TING")
         _secondScreenState.value  = SecondScreenState.Triggered("TESTING JIMMY") // THis doesnt work, activity doesnt exist yet so data doesnt propagate/get chance to be collected
     }
 

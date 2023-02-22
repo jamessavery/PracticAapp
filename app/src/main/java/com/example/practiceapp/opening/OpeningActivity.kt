@@ -15,14 +15,18 @@ import com.example.practiceapp.PracticeApplication
 import com.example.practiceapp.R
 import com.example.practiceapp.databinding.ActivityOpeningBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-class OpeningActivity : AppCompatActivity(), LifecycleOwner {
+class OpeningActivity : DaggerAppCompatActivity(), LifecycleOwner {
 
     @Inject
-    lateinit var openingViewModel: OpeningViewModel
+    lateinit var stateSingletonImpl: StateSingletonImpl
+
+//    @Inject
+//    lateinit var openingViewModel: OpeningViewModel
 
 //    @Inject
 //    lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -42,7 +46,6 @@ class OpeningActivity : AppCompatActivity(), LifecycleOwner {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (applicationContext as PracticeApplication).appComponent.inject(this)
         super.onCreate(savedInstanceState)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -73,7 +76,13 @@ class OpeningActivity : AppCompatActivity(), LifecycleOwner {
                 launchSecondScreenAct()
             }
             setIconSecondScreenButton.setOnClickListener {
-                viewModel.sendTriggeredState()
+//                viewModel.sendTriggeredState()
+                var whatItis = stateSingletonImpl.getTriggeredTing()
+                Log.e("jimmy", "jimmy set CURRENTLY IS $whatItis")
+                val toTrigger = "JAMES WAZ HERE"
+                stateSingletonImpl.setTriggeredTing(toTrigger)
+                whatItis = stateSingletonImpl.getTriggeredTing()
+                Log.e("jimmy", "jimmy set Triggered ting SET $whatItis")
             }
         }
     }
