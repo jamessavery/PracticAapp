@@ -26,7 +26,7 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class SecondScreenViewModel @Inject constructor(
-   //val userRepository: StateSingletonImpl
+    private val userRepository: StateSingleton
     ) : ViewModel() {
 
     private val _event: MutableSharedFlow<Event> = MutableSharedFlow()
@@ -72,8 +72,6 @@ class SecondScreenViewModel @Inject constructor(
 
         setLoading(false)
 
-//        Log.e("Jimmy", "${userRepository.getTriggeredTing()}")
-
         tflLiveData.postValue(result)
         tflLiveData
     }
@@ -86,6 +84,12 @@ class SecondScreenViewModel @Inject constructor(
                 _loadingState.emit(LoadingState.Idle)
             }
         }
+    }
+
+    fun getTriggeredTing(): String? {
+        val ting = userRepository.getTriggeredTing()
+        Log.e("jimmy", "JIMMY $ting at SecondSCreen")
+        return ting
     }
 
     sealed class Event {

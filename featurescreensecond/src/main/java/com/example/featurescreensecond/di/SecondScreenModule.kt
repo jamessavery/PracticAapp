@@ -1,4 +1,4 @@
-package com.example.practiceapp
+package com.example.featurescreensecond.di
 
 import com.example.featurescreensecond.di.SecondScreenComponent
 import dagger.Module

@@ -6,6 +6,6 @@ interface StateSingleton {
 
     fun setTriggeredTing(ting: String)
 
-    fun getTriggeredTing(): String
+    fun getTriggeredTing(): String?
 
 }

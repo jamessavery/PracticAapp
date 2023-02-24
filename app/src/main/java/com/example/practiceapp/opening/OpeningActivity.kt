@@ -23,22 +23,11 @@ import javax.inject.Inject
 class OpeningActivity : DaggerAppCompatActivity(), LifecycleOwner {
 
     @Inject
-    lateinit var stateSingletonImpl: StateSingletonImpl
-
-//    @Inject
-//    lateinit var openingViewModel: OpeningViewModel
-
-//    @Inject
-//    lateinit var viewModelFactory: ViewModelProvider.Factory
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityOpeningBinding
-
-        private val viewModel: OpeningViewModel by viewModels()
-//    private val viewModel: OpeningViewModel by viewModels {
-//        OpeningViewModel.provideFactory((applicationContext as PracticeApplication).stateSingletonImpl, this)
-//    }
-//    private lateinit var viewModel: OpeningViewModel
+    private val viewModel: OpeningViewModel by viewModels { viewModelFactory }
 
     private var isExpanded: Boolean = false
 
@@ -52,8 +41,6 @@ class OpeningActivity : DaggerAppCompatActivity(), LifecycleOwner {
         binding = ActivityOpeningBinding.inflate(layoutInflater)
         setContentView(binding.root)
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetView)
-
-//        viewModel = ViewModelProviders.of(this, viewModelFactory)[OpeningViewModel::class.java]
 
         setListeners()
         setUpObservers()
@@ -76,13 +63,7 @@ class OpeningActivity : DaggerAppCompatActivity(), LifecycleOwner {
                 launchSecondScreenAct()
             }
             setIconSecondScreenButton.setOnClickListener {
-//                viewModel.sendTriggeredState()
-                var whatItis = stateSingletonImpl.getTriggeredTing()
-                Log.e("jimmy", "jimmy set CURRENTLY IS $whatItis")
-                val toTrigger = "JAMES WAZ HERE"
-                stateSingletonImpl.setTriggeredTing(toTrigger)
-                whatItis = stateSingletonImpl.getTriggeredTing()
-                Log.e("jimmy", "jimmy set Triggered ting SET $whatItis")
+                viewModel.sendTriggeredState()
             }
         }
     }
@@ -100,7 +81,6 @@ class OpeningActivity : DaggerAppCompatActivity(), LifecycleOwner {
         startActivity(secondActivity)
 
 //        Navigation.findNavController(view).navigate(R.id.nav_graph_actFirstActvity)
-
     }
 
     // @see https://medium.com/androiddevelopers/a-safer-way-to-collect-flows-from-android-uis-23080b1f8bda#:~:text=Use%20the%20Lifecycle.,the%20UI%20layer%20in%20Android.

@@ -32,7 +32,7 @@ import javax.inject.Inject
 
 
 class OpeningViewModel @Inject constructor(
-//    private val userRepository: StateSingletonImpl
+    private val userRepository: StateSingleton
     ) : ViewModel() {
 
     private val _event: MutableSharedFlow<Event> = MutableSharedFlow()
@@ -325,7 +325,7 @@ class OpeningViewModel @Inject constructor(
     }
 
     fun practiceCOmpositeRx() {
-        val compositeDisposable: CompositeDisposable = CompositeDisposable() // TODO practice w this
+        val compositeDisposable: CompositeDisposable = CompositeDisposable()
         val disposable = Observable.just("ASd").subscribe()
 
         compositeDisposable.add(disposable)
@@ -340,8 +340,9 @@ class OpeningViewModel @Inject constructor(
     }
 
     fun sendTriggeredState() {
-//        userRepository.setTriggeredTing("JAMES WAZ HERE")
-//        Log.e("Jimmy", "JIMMY SET TRIGGERED TING")
+        Log.e("Jimmy", "JIMMY PREVIOUS VALUE TRIGGERED ${userRepository.getTriggeredTing()}")
+        userRepository.setTriggeredTing("JAMES WAZ HERE")
+        Log.e("Jimmy", "JIMMY TRIGGERED TING SET")
         _secondScreenState.value  = SecondScreenState.Triggered("TESTING JIMMY") // THis doesnt work, activity doesnt exist yet so data doesnt propagate/get chance to be collected
     }
 

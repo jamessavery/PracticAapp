@@ -20,63 +20,29 @@ import javax.inject.Inject
 class SecondScreenActivity : DaggerAppCompatActivity(), LifecycleOwner {
 
     @Inject
-    lateinit var stateSingletonImpl: StateSingletonImpl
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
-//    @Inject
-//    lateinit var secondScreenViewModel: SecondScreenViewModel
-
-//    @Inject
-//    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    private val viewModel: SecondScreenViewModel by viewModels()
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivitySecondScreenBinding
-//    private lateinit var viewModel: SecondScreenViewModel
-    //private val viewModel: ViewModelProvider(this, DemoViewModelFactory(repositoryObject)).get(SecondScreenViewModel::class.java)
-//    private val viewModel: SecondScreenViewModel by viewModels {
-//        SecondScreenViewModel.provideFactory(stateSingletonImpl, this)
-//}
+    private val viewModel: SecondScreenViewModel by viewModels { viewModelFactory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        //(applicationContext as PracticeApplication).appComponent.inject(this)
-//        SecondScreenComponent.factory().create(appComponent).inject(this)
-        //(applicationContext as PracticeApplication).appComponent.inject(this)
-//        injector.inject(this)
-//        Injector injector = (Injector)getApplicationContext();
-//        injector.inject(this)
         super.onCreate(savedInstanceState)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
         binding = ActivitySecondScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // TODO deprecated
-//        val vm = ViewModelProviders.of(this, viewModelFactory)[SecondScreenViewModel::class.java]
-
         setupListeners()
         setupObservers()
     }
 
     private fun setupListeners() {
-//        with(binding) {
-//
-//        }
-    }
-
-    private fun setupObservers() {
-        lifecycleScope.launch {
-//            openingViewModel.secondScreenState.flowWithLifecycle(lifecycle)
-//                .collect { secondScreenState: OpeningViewModel.SecondScreenState ->
-//                    if (secondScreenState == OpeningViewModel.SecondScreenState.Triggered) {
-//                        binding.secondScreenFragmentContainer.text = "TRIGGERED"
-//                    }
-//                }
-            // COLLECT ABOVE FROM SINGLETON
-            lifecycleScope.launchWhenCreated {
-                val ting = stateSingletonImpl.getTriggeredTing()
-                Log.e("jimmy", "JIMMY - $ting")
-            }
+        with(binding) {
+            secondScreenTV.text = viewModel.getTriggeredTing() ?: "Second Screen"
         }
     }
+
+    private fun setupObservers() {}
 
 }

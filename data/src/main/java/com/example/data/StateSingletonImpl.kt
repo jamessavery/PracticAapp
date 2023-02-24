@@ -9,13 +9,13 @@ class StateSingletonImpl : StateSingleton {
     private val _actionLiveData = MutableLiveData<String>()
     val actionLiveData: LiveData<String> = _actionLiveData
 
-    private var singletonVariable: String = "null"
+    private var singletonVariable: String? = null
 
     override fun setTriggeredTing(ting: String) {
         singletonVariable = ting
     }
 
-    override fun getTriggeredTing(): String {
+    override fun getTriggeredTing(): String? {
         return singletonVariable
     }
 
