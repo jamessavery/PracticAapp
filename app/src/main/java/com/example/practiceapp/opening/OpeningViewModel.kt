@@ -7,6 +7,7 @@ import androidx.savedstate.SavedStateRegistryOwner
 import com.example.data.StateSingleton
 import com.example.data.StateSingletonImpl
 import com.example.data.model.SendingToEmailResultEntity
+import com.example.data.services.*
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.*
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -19,10 +20,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import retrofit2.Response
-import com.example.data.services.QuotesApi
-import com.example.data.services.RetrofitHelper
-import com.example.data.services.RxRetrofitHelper
-import com.example.data.services.TflApi
 import com.example.data.services.response.QuoteList
 import com.example.data.services.response.Result
 import com.example.data.services.response.StopInfo
@@ -32,7 +29,8 @@ import javax.inject.Inject
 
 
 class OpeningViewModel @Inject constructor(
-    private val userRepository: StateSingleton
+    private val userRepository: StateSingleton,
+    private val quotesRxApi: QuotesRepository
     ) : ViewModel() {
 
     private val _event: MutableSharedFlow<Event> = MutableSharedFlow()
@@ -49,9 +47,8 @@ class OpeningViewModel @Inject constructor(
     var jimmysLiveData = MutableLiveData<QuoteList>()
     var tflLiveData = MutableLiveData<Response<StopInfo>>()
 
-    private val quotesApi = RetrofitHelper.getInstance().create(QuotesApi::class.java)
+    private val quotesApi = RetrofitHelper.getInstance().create(QuotesService::class.java)
     private val tflApi = RetrofitHelper.getInstance().create(TflApi::class.java)
-    private val quotesRxApi = RxRetrofitHelper.retrofitRxInstance.create(QuotesApi::class.java)
 
     var count = MutableLiveData<Int>()
 
@@ -299,13 +296,15 @@ class OpeningViewModel @Inject constructor(
 //            .subscribe { it -> Log.e("Jimmy", "Jimmy $it") }
 
         // This allows the separate processing of Os of which results are literally concatted into a list, see final example where this didnt work w concatMap
-        val observable1 = quotesRxApi.getQuotes()
-        val observable2 = quotesRxApi.getQuotes()
-        Observable.concat(observable1, observable2)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io()).subscribe {
-                Log.e("JimmySuccess", it.results?.first().toString())
-            } // THIS WORKS EXACTLY AS INTENDED!
+        viewModelScope.launch {
+            val observable1 = quotesRxApi.getQuotes()
+            val observable2 = quotesRxApi.getQuotes()
+            Observable.concat(observable1, observable2)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe {
+                    Log.e("JimmySuccess", it.results?.first().toString())
+                } // THIS WORKS EXACTLY AS INTENDED!
+        }
 
         // BELOW doesnt allow the passing of both Os into the list that gets printed
 //        val observable = quotesRxApi.getQuotes()

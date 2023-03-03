@@ -1,21 +1,12 @@
 package com.example.featurescreensecond
 
-import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.*
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.CreationExtras
-import androidx.lifecycle.viewmodel.viewModelFactory
-import androidx.savedstate.SavedStateRegistryOwner
 import com.example.data.StateSingleton
-import com.example.data.StateSingletonImpl
-import com.example.data.services.QuotesApi
-import com.example.data.services.RetrofitHelper
-import com.example.data.services.TflApi
+import com.example.data.services.*
 import com.example.data.services.response.QuoteList
 import com.example.data.services.response.StopInfo
 import kotlinx.coroutines.Dispatchers
-//import com.example.practiceapp.repo.StateSingleton
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -26,7 +17,8 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class SecondScreenViewModel @Inject constructor(
-    private val userRepository: StateSingleton
+    private val userRepository: StateSingleton,
+    private val repository: QuotesRepository
     ) : ViewModel() {
 
     private val _event: MutableSharedFlow<Event> = MutableSharedFlow()
@@ -35,12 +27,46 @@ class SecondScreenViewModel @Inject constructor(
     private val _loadingState: MutableStateFlow<LoadingState> = MutableStateFlow(LoadingState.Idle)
     val loadingState: StateFlow<LoadingState> = _loadingState
 
+    private val _showSnackBar = MutableLiveData(false) // TODO jimmy Should the state of this be in the VM and RX like this?!
+    val showSnackBar: LiveData<Boolean>
+        get() = _showSnackBar
+
+    // TODO ----> https://proandroiddev.com/flexible-recyclerview-adapter-with-mvvm-and-data-binding-74f75caef66a
+//    val data: LiveData<List<ItemViewModel>>
+//        get() = _data
+//    private val _data = MutableLiveData<List<ItemViewModel>>(emptyList())
+
+    init {
+        loadData()
+    }
+
+    private fun loadData() {
+        // This is a coroutine scope with the lifecycle of the ViewModel
+        viewModelScope.launch {
+            // getCarListData() is a suspend function
+            val carList = repository.getQuotes() /// THIS CAUSING NPE UNDERSTAND WHY, SOMETHING TO DO W DI
+                .doOnNext() {
+                    completedTing(it)
+                }
+                .subscribe()
+
+//            val carsByMake = carList.groupBy { it.make }
+//
+//            val viewData = createViewData(carsByMake)
+//            _data.postValue(viewData)
+        }
+    }
+
+    private fun completedTing(quoteList: QuoteList) {
+        Log.e("Jimmy", "$quoteList")
+    }
+
     lateinit var thisIs: String
 
     var jimmysLiveData = MutableLiveData<QuoteList>()
     var tflLiveData = MutableLiveData<Response<StopInfo>>()
 
-    private val quotesApi = RetrofitHelper.getInstance().create(QuotesApi::class.java)
+    private val quotesApi = RetrofitHelper.getInstance().create(QuotesService::class.java)
     private val tflApi = RetrofitHelper.getInstance().create(TflApi::class.java)
 
     var count = MutableLiveData<Int>()
@@ -86,7 +112,7 @@ class SecondScreenViewModel @Inject constructor(
         }
     }
 
-    fun getTriggeredTing(): String? {
+    fun getTriggeredTing(): String? { // This is a getter, so it ISNT reactive! It should be observing so it auto gets it
         val ting = userRepository.getTriggeredTing()
         Log.e("jimmy", "JIMMY $ting at SecondSCreen")
         return ting

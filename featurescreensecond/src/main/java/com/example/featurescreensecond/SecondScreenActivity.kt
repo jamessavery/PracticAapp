@@ -5,9 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.*
 import androidx.navigation.ui.AppBarConfiguration
 import com.example.data.StateSingletonImpl
 import com.example.featurescreensecond.databinding.ActivitySecondScreenBinding

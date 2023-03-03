@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import javax.inject.Singleton
 
-class StateSingletonImpl : StateSingleton {
+class StateSingletonImpl() : StateSingleton {
 
     private val _actionLiveData = MutableLiveData<String>()
     val actionLiveData: LiveData<String> = _actionLiveData
