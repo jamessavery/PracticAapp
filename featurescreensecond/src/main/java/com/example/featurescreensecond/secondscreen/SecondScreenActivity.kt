@@ -8,6 +8,8 @@ import androidx.activity.viewModels
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.*
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.featurescreensecond.databinding.ActivitySecondScreenBinding
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
@@ -37,11 +39,15 @@ class SecondScreenActivity : DaggerAppCompatActivity(), LifecycleOwner {
                 // Update views with the data.
             }
         }
+
+
+        val recyclerView: RecyclerView = binding.recyclerView
+        recyclerView.adapter = FlowerAdapter(listOf("asd", "asd", "asd"))
     }
 
     private fun setupListeners() {
         with(binding) {
-            secondScreenTV.text = viewModel.getTriggeredTing() ?: "Second Screen"
+            //secondScreenTV.text = viewModel.getTriggeredTing() ?: "Second Screen"
         }
     }
 
