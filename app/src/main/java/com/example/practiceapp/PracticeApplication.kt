@@ -1,20 +1,16 @@
 package com.example.practiceapp
 
 import android.app.Application
-import com.example.featurescreensecond.SecondScreenActivity
 import com.example.practiceapp.di.ActivityBuildersModule
 import com.example.practiceapp.di.AppModule
-import com.example.practiceapp.opening.OpeningActivity
 import com.example.practiceapp.utils.ViewModelModule
 import dagger.BindsInstance
 import dagger.Component
-import dagger.Module
-import dagger.Provides
 import dagger.android.*
 import dagger.android.support.AndroidSupportInjectionModule
-import javax.inject.Inject
 import javax.inject.Singleton
 
+// TODO finish notes on below DI approach - https://medium.com/@shashankmohabia/dagger-android-with-mvvm-dependency-injection-for-android-3a7e33ad1013
 class PracticeApplication : DaggerApplication() {
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
@@ -42,7 +38,7 @@ interface AppComponent : AndroidInjector<PracticeApplication> { // HAS TO BE CAL
     // provide/satisfy them to the fields ((F injection?)) that LoginActivity is requesting
 //    fun inject(activity: OpeningActivity)
 
-    // No longer needed with Android support library approach!
+    // No longer needed with Android support library approach! Now uses ActivityBuildersModule
 //    fun inject(activity: SecondScreenActivity)
 }
 

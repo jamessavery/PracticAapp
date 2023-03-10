@@ -1,11 +1,8 @@
 package com.example.practiceapp.opening
 
-import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.*
-import androidx.savedstate.SavedStateRegistryOwner
 import com.example.data.StateSingleton
-import com.example.data.StateSingletonImpl
 import com.example.data.model.SendingToEmailResultEntity
 import com.example.data.services.*
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -23,14 +20,13 @@ import retrofit2.Response
 import com.example.data.services.response.QuoteList
 import com.example.data.services.response.Result
 import com.example.data.services.response.StopInfo
-import com.example.featurescreensecond.SecondScreenViewModel
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
 class OpeningViewModel @Inject constructor(
     private val userRepository: StateSingleton,
-    private val quotesRxApi: QuotesRepository
+    private val quotesRepository: QuotesRepository
     ) : ViewModel() {
 
     private val _event: MutableSharedFlow<Event> = MutableSharedFlow()
@@ -47,9 +43,6 @@ class OpeningViewModel @Inject constructor(
     var jimmysLiveData = MutableLiveData<QuoteList>()
     var tflLiveData = MutableLiveData<Response<StopInfo>>()
 
-    private val quotesApi = RetrofitHelper.getInstance().create(QuotesService::class.java)
-    private val tflApi = RetrofitHelper.getInstance().create(TflApi::class.java)
-
     var count = MutableLiveData<Int>()
 
     init {
@@ -65,7 +58,7 @@ class OpeningViewModel @Inject constructor(
 
         Log.e("jimmy", "before timer")
         delay(2000L)
-        quotesRxApi.getQuotes().doOnSubscribe {
+        quotesRepository.getRxQuotes().doOnSubscribe {
             setLoading(true)
         }.doOnTerminate {
             setLoading(false)
@@ -297,8 +290,8 @@ class OpeningViewModel @Inject constructor(
 
         // This allows the separate processing of Os of which results are literally concatted into a list, see final example where this didnt work w concatMap
         viewModelScope.launch {
-            val observable1 = quotesRxApi.getQuotes()
-            val observable2 = quotesRxApi.getQuotes()
+            val observable1 = quotesRepository.getRxQuotes()
+            val observable2 = quotesRepository.getRxQuotes()
             Observable.concat(observable1, observable2)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io()).subscribe {

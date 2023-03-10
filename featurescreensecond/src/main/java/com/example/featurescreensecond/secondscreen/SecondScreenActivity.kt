@@ -1,17 +1,15 @@
-package com.example.featurescreensecond
+package com.example.featurescreensecond.secondscreen
 
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.*
 import androidx.navigation.ui.AppBarConfiguration
-import com.example.data.StateSingletonImpl
 import com.example.featurescreensecond.databinding.ActivitySecondScreenBinding
-import dagger.android.DaggerActivity
 import dagger.android.support.DaggerAppCompatActivity
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -32,7 +30,13 @@ class SecondScreenActivity : DaggerAppCompatActivity(), LifecycleOwner {
         setContentView(binding.root)
 
         setupListeners()
-        setupObservers()
+        // Coroutine here auto-starts only upon reaching onStart() lifecycle state
+        lifecycleScope.launchWhenStarted {
+            viewModel.ting.collect {
+                Log.e("JIMMY219", "COllected from Act - $it")
+                // Update views with the data.
+            }
+        }
     }
 
     private fun setupListeners() {
@@ -41,6 +45,10 @@ class SecondScreenActivity : DaggerAppCompatActivity(), LifecycleOwner {
         }
     }
 
-    private fun setupObservers() {}
+    private fun setupObservers() {
+        viewModel.viewData.observe(this@SecondScreenActivity, Observer {
+            Toast.makeText(this, it.toString(), Toast.LENGTH_SHORT).show()
+        })
+    }
 
 }

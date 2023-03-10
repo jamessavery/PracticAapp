@@ -2,12 +2,22 @@ package com.example.data.services
 
 import io.reactivex.rxjava3.core.Observable
 import com.example.data.services.response.QuoteList
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class QuotesApi @Inject constructor(private val baseApi: BaseApi) : QuotesService {
 
-    override fun getQuotes(): Observable<QuoteList> {
-        return baseApi.quotesRxApi.getQuotes()
+    override fun getRxQuotes(): Observable<QuoteList> {
+        return baseApi.quotesRxApi.getRxQuotes()
+    }
+
+    override suspend fun getQuotes(): QuoteList {
+        return baseApi.quotesApi.getQuotes()
     }
 
 }

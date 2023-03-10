@@ -20,7 +20,7 @@ object RetrofitHelper {
         httpClient.addInterceptor(logging)
 
         return Retrofit.Builder()
-            .baseUrl(TFL_BASE)
+            .baseUrl(BASE_QUOTE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             // Need to add converter factory to convert JSON object to Java object
             .client(httpClient.build())

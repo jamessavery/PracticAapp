@@ -3,7 +3,7 @@
 
     <application>
         <activity
-            android:name="com.example.featurescreensecond.SecondScreenActivity"
+            android:name="com.example.featurescreensecond.secondscreen.SecondScreenActivity"
             android:exported="true"/>
     </application>
 

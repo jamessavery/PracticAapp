@@ -1,4 +1,4 @@
-package com.example.featurescreensecond
+package com.example.featurescreensecond.secondscreen
 
 import android.util.Log
 import androidx.lifecycle.*
@@ -7,10 +7,7 @@ import com.example.data.services.*
 import com.example.data.services.response.QuoteList
 import com.example.data.services.response.StopInfo
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Response
@@ -18,7 +15,7 @@ import javax.inject.Inject
 
 class SecondScreenViewModel @Inject constructor(
     private val userRepository: StateSingleton,
-    private val repository: QuotesRepository
+    private val quotesRepository: QuotesRepository
     ) : ViewModel() {
 
     private val _event: MutableSharedFlow<Event> = MutableSharedFlow()
@@ -27,14 +24,21 @@ class SecondScreenViewModel @Inject constructor(
     private val _loadingState: MutableStateFlow<LoadingState> = MutableStateFlow(LoadingState.Idle)
     val loadingState: StateFlow<LoadingState> = _loadingState
 
+    // Todo should probs use SoT here (If thats what I think it is), fix later..
+    val ting get() = quotesRepository.getQuotes() // .asLiveData() can be done, but is collected by calling .observer(), which is deprecated! State/Shared better!
+                                            // shareIn(
+    // scope =
+    // ) is used to transform flow -> SharedFlow
+    // About halfway, F "shareIn(" - https://proandroiddev.com/should-we-choose-kotlins-stateflow-or-sharedflow-to-substitute-for-android-s-livedata-2d69f2bd6fa5
+
     private val _showSnackBar = MutableLiveData(false) // TODO jimmy Should the state of this be in the VM and RX like this?!
     val showSnackBar: LiveData<Boolean>
         get() = _showSnackBar
 
     // TODO ----> https://proandroiddev.com/flexible-recyclerview-adapter-with-mvvm-and-data-binding-74f75caef66a
-//    val data: LiveData<List<ItemViewModel>>
-//        get() = _data
-//    private val _data = MutableLiveData<List<ItemViewModel>>(emptyList())
+    val viewData: LiveData<QuoteList>
+        get() = _viewData
+    private val _viewData = MutableLiveData<QuoteList>()
 
     init {
         loadData()
@@ -43,31 +47,23 @@ class SecondScreenViewModel @Inject constructor(
     private fun loadData() {
         // This is a coroutine scope with the lifecycle of the ViewModel
         viewModelScope.launch {
+            val quotesList: QuoteList
             // getCarListData() is a suspend function
-            val carList = repository.getQuotes() /// THIS CAUSING NPE UNDERSTAND WHY, SOMETHING TO DO W DI
-                .doOnNext() {
-                    completedTing(it)
-                }
-                .subscribe()
-
-//            val carsByMake = carList.groupBy { it.make }
-//
-//            val viewData = createViewData(carsByMake)
-//            _data.postValue(viewData)
+            quotesRepository.getQuotes().collect {
+                postData(it)
+            }
         }
     }
 
-    private fun completedTing(quoteList: QuoteList) {
-        Log.e("Jimmy", "$quoteList")
+    private fun postData(quoteList: QuoteList) {
+        println("JIMMY219- ${quoteList}")
+        _viewData.postValue(quoteList)
     }
 
     lateinit var thisIs: String
 
     var jimmysLiveData = MutableLiveData<QuoteList>()
     var tflLiveData = MutableLiveData<Response<StopInfo>>()
-
-    private val quotesApi = RetrofitHelper.getInstance().create(QuotesService::class.java)
-    private val tflApi = RetrofitHelper.getInstance().create(TflApi::class.java)
 
     var count = MutableLiveData<Int>()
 
@@ -85,20 +81,22 @@ class SecondScreenViewModel @Inject constructor(
     suspend fun loadTfl(): MutableLiveData<Response<StopInfo>> = withContext(Dispatchers.IO) {
         setLoading(true)
 
-        val result = tflApi.getStopInfo("490G00005781")
+        //val result = tflApi.getStopInfo("490G00005781")
 
-        if (result.isSuccessful) {
-            Log.e(
-                "jimmy success", "${result.body()}"
-            ) // TODO "result" is services.response.StopInfo but most of it is null..? But at least detailed response from server works! Figure out wag1
-        } else {
-            Log.e("jimmy error1", "${result.body()}")
-            Log.e("jimmy error2", "${result.errorBody()}")
-        }
+//TODO Create repo for TFL Api
 
-        setLoading(false)
-
-        tflLiveData.postValue(result)
+//        if (result.isSuccessful) {
+//            Log.e(
+//                "jimmy success", "${result.body()}"
+//            ) // TODO "result" is services.response.StopInfo but most of it is null..? But at least detailed response from server works! Figure out wag1
+//        } else {
+//            Log.e("jimmy error1", "${result.body()}")
+//            Log.e("jimmy error2", "${result.errorBody()}")
+//        }
+//
+//        setLoading(false)
+//
+//        tflLiveData.postValue(result)
         tflLiveData
     }
 

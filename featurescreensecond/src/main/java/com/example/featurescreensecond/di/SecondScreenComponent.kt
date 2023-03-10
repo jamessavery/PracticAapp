@@ -1,6 +1,6 @@
 package com.example.featurescreensecond.di
 
-import com.example.featurescreensecond.SecondScreenActivity
+import com.example.featurescreensecond.secondscreen.SecondScreenActivity
 import dagger.Subcomponent
 
 @Subcomponent

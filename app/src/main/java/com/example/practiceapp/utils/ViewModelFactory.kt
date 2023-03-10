@@ -2,7 +2,7 @@ package com.example.practiceapp.utils
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.featurescreensecond.SecondScreenViewModel
+import com.example.featurescreensecond.secondscreen.SecondScreenViewModel
 import com.example.practiceapp.opening.OpeningViewModel
 import dagger.Binds
 import dagger.MapKey

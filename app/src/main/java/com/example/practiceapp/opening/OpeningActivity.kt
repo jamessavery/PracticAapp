@@ -4,14 +4,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.*
 import androidx.navigation.ui.AppBarConfiguration
-import com.example.data.StateSingletonImpl
-import com.example.featurescreensecond.SecondScreenViewModel
-import com.example.practiceapp.PracticeApplication
 import com.example.practiceapp.R
 import com.example.practiceapp.databinding.ActivityOpeningBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -36,7 +32,6 @@ class OpeningActivity : DaggerAppCompatActivity(), LifecycleOwner {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         WindowCompat.setDecorFitsSystemWindows(window, false)
         binding = ActivityOpeningBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -76,7 +71,7 @@ class OpeningActivity : DaggerAppCompatActivity(), LifecycleOwner {
 
         val secondActivity = intent.setClassName(
             this,
-            "com.example.featurescreensecond.SecondScreenActivity"
+            "com.example.featurescreensecond.secondscreen.SecondScreenActivity"
         ) // https://proandroiddev.com/easy-navigation-in-a-multi-module-android-project-2374ecbaa0ae
         startActivity(secondActivity)
 
