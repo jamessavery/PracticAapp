@@ -13,7 +13,7 @@ object RetrofitHelper {
 
     private var logging: HttpLoggingInterceptor = HttpLoggingInterceptor()
 
-
+// TODO https://stackoverflow.com/questions/61729790/retrofit-singleton-in-kotlin
     fun getInstance(): Retrofit {
         logging.level = HttpLoggingInterceptor.Level.BODY
         val httpClient = OkHttpClient.Builder()
