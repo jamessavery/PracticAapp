@@ -11,6 +11,4 @@ interface SecondScreenComponent {
         fun create(): SecondScreenComponent
     }
 
-    fun inject(activity: SecondScreenActivity)
-
 }

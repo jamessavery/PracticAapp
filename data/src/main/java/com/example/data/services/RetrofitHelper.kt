@@ -3,8 +3,7 @@ package com.example.data.services
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-
+import retrofit2.converter.moshi.MoshiConverterFactory
 
 object RetrofitHelper {
 
@@ -13,15 +12,16 @@ object RetrofitHelper {
 
     private var logging: HttpLoggingInterceptor = HttpLoggingInterceptor()
 
-
+// TODO https://stackoverflow.com/questions/61729790/retrofit-singleton-in-kotlin
     fun getInstance(): Retrofit {
         logging.level = HttpLoggingInterceptor.Level.BODY
         val httpClient = OkHttpClient.Builder()
+
         httpClient.addInterceptor(logging)
 
         return Retrofit.Builder()
             .baseUrl(BASE_QUOTE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create())
             // Need to add converter factory to convert JSON object to Java object
             .client(httpClient.build())
             .build()

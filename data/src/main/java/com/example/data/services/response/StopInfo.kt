@@ -1,7 +1,9 @@
 package com.example.data.services.response
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class StopInfo(
     @JsonProperty("\$type") var type: String? = null,
     @JsonProperty("naptanId") var naptanId: String? = null,
@@ -23,6 +25,7 @@ data class StopInfo(
 
 )
 
+@JsonClass(generateAdapter = true)
 data class LineModeGroups(
 
     @JsonProperty("\$type") var type: String? = null,
@@ -31,6 +34,7 @@ data class LineModeGroups(
 
 )
 
+@JsonClass(generateAdapter = true)
 data class AdditionalProperty(
     @JsonProperty("\$type")
     val type: String,
@@ -41,6 +45,7 @@ data class AdditionalProperty(
     val value: String
 )
 
+@JsonClass(generateAdapter = true)
 data class LineGroup(
     @JsonProperty("\$type")
     val type: String,
@@ -50,6 +55,7 @@ data class LineGroup(
     val lineIdentifier: List<String>
 )
 
+@JsonClass(generateAdapter = true)
 data class LineModeGroup(
     @JsonProperty("\$type")
     val type: String,
@@ -57,6 +63,7 @@ data class LineModeGroup(
     val lineIdentifier: List<String>
 )
 
+@JsonClass(generateAdapter = true)
 data class Children(
     @JsonProperty("\$type") var type: String? = null,
     @JsonProperty("naptanId") var naptanId: String? = null,
@@ -80,6 +87,7 @@ data class Children(
 
 )
 
+@JsonClass(generateAdapter = true)
 data class AdditionalProperties(
     @JsonProperty("\$type") var type: String? = null,
     @JsonProperty("category") var category: String? = null,
@@ -89,6 +97,7 @@ data class AdditionalProperties(
 
 )
 
+@JsonClass(generateAdapter = true)
 data class Lines(
 
     @JsonProperty("\$type") var type: String? = null,
@@ -101,6 +110,7 @@ data class Lines(
 
 )
 
+@JsonClass(generateAdapter = true)
 data class Line(
     @JsonProperty("\$type")
     val type: String,
@@ -114,6 +124,7 @@ data class Line(
     val status: String
 )
 
+@JsonClass(generateAdapter = true)
 data class Crowding(
     @JsonProperty("\$type")
     val type: String? = null

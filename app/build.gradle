@@ -35,7 +35,7 @@ android {
         jvmTarget = '1.8'
     }
     buildFeatures {
-        dataBinding false // Increases build times, I dont really use any ways
+        dataBinding true // Increases build times, I use now..
         viewBinding true
     }
 

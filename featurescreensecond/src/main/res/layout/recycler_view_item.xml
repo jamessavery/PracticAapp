@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="stringToBind"
+            type="com.example.featurescreensecond.secondscreen.AuthorModel" />
+
+    </data>
+
+    <!-- TODO USE CONSTRAINT: https://github.com/kozmi55/Flexible-RecyclerView-with-Databinding/blob/master/app/src/main/res/layout/item_car_listing.xml-->
+    <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/cardview_light_background"
+        android:minHeight="30dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/testing_items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{stringToBind.author}"
+            android:textSize="32sp" />
+
+        <TextView
+            android:id="@+id/testing_items_two"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{stringToBind.authorSlug}"
+            android:textSize="32sp" />
+
+    </LinearLayout>
+
+</layout>

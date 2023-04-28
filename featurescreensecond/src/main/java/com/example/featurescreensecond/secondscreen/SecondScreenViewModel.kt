@@ -1,16 +1,20 @@
 package com.example.featurescreensecond.secondscreen
 
+import android.net.ConnectivityManager
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.data.StateSingleton
 import com.example.data.services.*
 import com.example.data.services.response.QuoteList
+import com.example.data.services.response.Result
 import com.example.data.services.response.StopInfo
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Response
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 class SecondScreenViewModel @Inject constructor(
@@ -24,6 +28,14 @@ class SecondScreenViewModel @Inject constructor(
     private val _loadingState: MutableStateFlow<LoadingState> = MutableStateFlow(LoadingState.Idle)
     val loadingState: StateFlow<LoadingState> = _loadingState
 
+    private val _quotesState: MutableStateFlow<QuotesState> = MutableStateFlow(QuotesState.Empty)
+    val quotesRecyclerState: StateFlow<QuotesState> = _quotesState
+
+    // 1) It emits weirdly poss because I manually use emit() 2) This could be in a repo, as a repo will get from a datasource!!
+    // TODO move this to another repo AND HAVE THAT REPO LISTEN TO THIS .. Have it collect and stop collect perhaps
+    // Also consider sleeping phone for buffer (or to uncollect..?)
+    private val testingShareIn: Flow<String> = quotesRepository.getJimmyMade().shareIn(viewModelScope, SharingStarted.Lazily, 3)
+
     // Todo should probs use SoT here (If thats what I think it is), fix later..
     val ting get() = quotesRepository.getQuotes() // .asLiveData() can be done, but is collected by calling .observer(), which is deprecated! State/Shared better!
                                             // shareIn(
@@ -35,29 +47,69 @@ class SecondScreenViewModel @Inject constructor(
     val showSnackBar: LiveData<Boolean>
         get() = _showSnackBar
 
-    // TODO ----> https://proandroiddev.com/flexible-recyclerview-adapter-with-mvvm-and-data-binding-74f75caef66a
     val viewData: LiveData<QuoteList>
         get() = _viewData
     private val _viewData = MutableLiveData<QuoteList>()
 
     init {
-        loadData()
+//        loadData()
+//        after10Sec()
+        testShareIn()
     }
 
-    private fun loadData() {
-        // This is a coroutine scope with the lifecycle of the ViewModel
+    private fun testShareIn() {
         viewModelScope.launch {
-            val quotesList: QuoteList
-            // getCarListData() is a suspend function
-            quotesRepository.getQuotes().collect {
-                postData(it)
+            launch {
+                Log.e("jimmy", "--- IN testShareIn --- ")
+                testingShareIn.collect() {
+                    Log.e("jimmy SHAREIN", it)
+                }
             }
         }
     }
 
-    private fun postData(quoteList: QuoteList) {
-        println("JIMMY219- ${quoteList}")
-        _viewData.postValue(quoteList)
+    fun testShareIn2() {
+        viewModelScope.launch {
+            launch {
+                Log.e("jimmy", "--- IN testShareIn2 --- ")
+                testingShareIn.collect { // WHY ONCLICK INVOKING THIS INVOKE THE PREVIOUS 1 ONLY ONCE.
+                    Log.e("jimmy SHAREIN2", it)
+                }
+            }
+        }
+    }
+
+    private fun after10Sec() {
+        viewModelScope.launch {
+            delay(3000L)
+            _quotesState.update {
+                QuotesState.Loaded(QuoteList(results = listOf<com.example.data.services.response.Result>(
+                    Result(author = "DICKHEAD", authorSlug = "PLSWORK")
+                )))
+                // TODO clean up & use shareIn
+            }
+        }
+    }
+
+    private fun loadData() {
+        // This is a coroutine scope with the lifecycle of the ViewModel
+        try {
+            viewModelScope.launch {
+                quotesRepository.getResponseQuotes().collect { // So its meant to collect it once here
+                    postDataForRecycler(it) // And once posted, collected again in view?
+                }
+            }
+        } catch (e: Exception) {
+            if (e is UnknownHostException) {
+              Log.e("jimmy UnknownHostException", e.toString())
+            }
+        }
+
+    }
+
+    private fun postDataForRecycler(quoteList: Response<QuoteList>) {
+        println("JIMMY Received quotelist - ${quoteList}")
+        _quotesState.update { QuotesState.Loaded(quoteList.body()!!) } // Thread safe pushing of state
     }
 
     lateinit var thisIs: String
@@ -82,8 +134,6 @@ class SecondScreenViewModel @Inject constructor(
         setLoading(true)
 
         //val result = tflApi.getStopInfo("490G00005781")
-
-//TODO Create repo for TFL Api
 
 //        if (result.isSuccessful) {
 //            Log.e(
@@ -124,6 +174,17 @@ class SecondScreenViewModel @Inject constructor(
     sealed class LoadingState {
         object Idle : LoadingState()
         object Loading : LoadingState()
+    }
+
+    sealed class QuotesState {
+        object Empty : QuotesState()
+        data class Loaded(val quoteList: QuoteList) : QuotesState()
+        object Error : QuotesState()
+    }
+
+    companion object {
+        const val HEADER_ITEM = 0
+        const val RECYCLER_VIEW_ITEM = 1
     }
 
     // Define ViewModel factory in a companion object
