@@ -1,5 +1,6 @@
 package com.example.featurescreensecond.secondscreen
 
+import android.net.ConnectivityManager
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.data.StateSingleton
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Response
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 class SecondScreenViewModel @Inject constructor(
@@ -28,6 +30,11 @@ class SecondScreenViewModel @Inject constructor(
 
     private val _quotesState: MutableStateFlow<QuotesState> = MutableStateFlow(QuotesState.Empty)
     val quotesRecyclerState: StateFlow<QuotesState> = _quotesState
+
+    // 1) It emits weirdly poss because I manually use emit() 2) This could be in a repo, as a repo will get from a datasource!!
+    // TODO move this to another repo AND HAVE THAT REPO LISTEN TO THIS .. Have it collect and stop collect perhaps
+    // Also consider sleeping phone for buffer (or to uncollect..?)
+    private val testingShareIn: Flow<String> = quotesRepository.getJimmyMade().shareIn(viewModelScope, SharingStarted.Lazily, 3)
 
     // Todo should probs use SoT here (If thats what I think it is), fix later..
     val ting get() = quotesRepository.getQuotes() // .asLiveData() can be done, but is collected by calling .observer(), which is deprecated! State/Shared better!
@@ -45,8 +52,31 @@ class SecondScreenViewModel @Inject constructor(
     private val _viewData = MutableLiveData<QuoteList>()
 
     init {
-        loadData()
-        after10Sec()
+//        loadData()
+//        after10Sec()
+        testShareIn()
+    }
+
+    private fun testShareIn() {
+        viewModelScope.launch {
+            launch {
+                Log.e("jimmy", "--- IN testShareIn --- ")
+                testingShareIn.collect() {
+                    Log.e("jimmy SHAREIN", it)
+                }
+            }
+        }
+    }
+
+    fun testShareIn2() {
+        viewModelScope.launch {
+            launch {
+                Log.e("jimmy", "--- IN testShareIn2 --- ")
+                testingShareIn.collect { // WHY ONCLICK INVOKING THIS INVOKE THE PREVIOUS 1 ONLY ONCE.
+                    Log.e("jimmy SHAREIN2", it)
+                }
+            }
+        }
     }
 
     private fun after10Sec() {
@@ -56,22 +86,30 @@ class SecondScreenViewModel @Inject constructor(
                 QuotesState.Loaded(QuoteList(results = listOf<com.example.data.services.response.Result>(
                     Result(author = "DICKHEAD", authorSlug = "PLSWORK")
                 )))
+                // TODO clean up & use shareIn
             }
         }
     }
 
     private fun loadData() {
         // This is a coroutine scope with the lifecycle of the ViewModel
-        viewModelScope.launch {
-            quotesRepository.getQuotes().collect { // So its meant to collect it once here
-                postDataForRecycler(it) // And once posted, collected again in view?
+        try {
+            viewModelScope.launch {
+                quotesRepository.getResponseQuotes().collect { // So its meant to collect it once here
+                    postDataForRecycler(it) // And once posted, collected again in view?
+                }
+            }
+        } catch (e: Exception) {
+            if (e is UnknownHostException) {
+              Log.e("jimmy UnknownHostException", e.toString())
             }
         }
+
     }
 
-    private fun postDataForRecycler(quoteList: QuoteList) {
+    private fun postDataForRecycler(quoteList: Response<QuoteList>) {
         println("JIMMY Received quotelist - ${quoteList}")
-        _quotesState.update { QuotesState.Loaded(quoteList) } // Thread safe pushing of state
+        _quotesState.update { QuotesState.Loaded(quoteList.body()!!) } // Thread safe pushing of state
     }
 
     lateinit var thisIs: String

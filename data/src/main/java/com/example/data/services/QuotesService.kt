@@ -13,4 +13,7 @@ interface QuotesService {
 
     @GET("/quotes")
     suspend fun getQuotes(): QuoteList
+
+    @GET("/quotes")
+    suspend fun getResponseQuotes(): Response<QuoteList>
 }

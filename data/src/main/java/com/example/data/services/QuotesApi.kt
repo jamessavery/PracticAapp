@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
+import retrofit2.Response
 import javax.inject.Inject
 
 class QuotesApi @Inject constructor(private val baseApi: BaseApi) : QuotesService {
@@ -18,6 +19,10 @@ class QuotesApi @Inject constructor(private val baseApi: BaseApi) : QuotesServic
 
     override suspend fun getQuotes(): QuoteList {
         return baseApi.quotesApi.getQuotes()
+    }
+
+    override suspend fun getResponseQuotes(): Response<QuoteList> {
+        return baseApi.quotesApi.getResponseQuotes()
     }
 
 }
