@@ -10,11 +10,13 @@ import dagger.android.*
 import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
-// TODO finish notes on below DI approach - https://medium.com/@shashankmohabia/dagger-android-with-mvvm-dependency-injection-for-android-3a7e33ad1013
 class PracticeApplication : DaggerApplication() {
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        return DaggerAppComponent.factory().create(this)
+        return DaggerAppComponent
+            .factory()
+            .create(this)
+        //return DaggerAppComponent.builder() // This is an older way of going about things, .factory() is newer & less verbose
     }
 }
 
@@ -29,9 +31,11 @@ class PracticeApplication : DaggerApplication() {
 )
 interface AppComponent : AndroidInjector<PracticeApplication> { // HAS TO BE CALLED APPCOMPONENT
 
+    // Note - You can only have 1 of this -
+    // (this being Factory or Builder)
     @Component.Factory
     interface Factory {
-        fun create(@BindsInstance application: Application): AppComponent
+        fun create(@BindsInstance application: Application): AppComponent //@BindsInstance here makes application available app-wide, used for appContext
     }
 
     // Tells Dagger that OpeningActivity requests dependencies, so the graph needs to
