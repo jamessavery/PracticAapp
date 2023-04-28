@@ -5,57 +5,16 @@
     android:id="@+id/second_screen_activity"
     tools:context="com.example.featurescreensecond.secondscreen.SecondScreenActivity">
 
-    <data>
-        <variable
-            name="myAdapter"
-            type="com.example.featurescreensecond.secondscreen.QuotesRecyclerViewAdapter" />
-    </data>
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:paddingTop="15dp"
-            android:background="@color/design_default_color_primary">
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Test button">
-            </Button>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Tings go here.."
-                android:textColor="#FFFFFF"
-                android:textSize="10sp" />
-
-        </LinearLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                style="?android:progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/quotesRecyclerV"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:adapter="@{myAdapter}"
-                android:paddingTop="10dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-        </FrameLayout>
     </LinearLayout>
 </layout>
