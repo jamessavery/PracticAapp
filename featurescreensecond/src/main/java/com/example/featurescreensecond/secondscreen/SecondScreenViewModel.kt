@@ -1,5 +1,7 @@
 package com.example.featurescreensecond.secondscreen
 
+import android.content.Context
+import android.os.Environment
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.data.StateSingleton
@@ -13,12 +15,14 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Response
+import java.io.FileOutputStream
+import java.io.OutputStreamWriter
 import javax.inject.Inject
 
 class SecondScreenViewModel @Inject constructor(
     private val userRepository: StateSingleton,
     private val quotesRepository: QuotesRepository
-    ) : ViewModel() {
+) : ViewModel() {
 
     private val _event: MutableSharedFlow<Event> = MutableSharedFlow()
     val event: SharedFlow<Event> = _event
@@ -31,7 +35,7 @@ class SecondScreenViewModel @Inject constructor(
 
     // Todo should probs use SoT here (If thats what I think it is), fix later..
     val ting get() = quotesRepository.getQuotes() // .asLiveData() can be done, but is collected by calling .observer(), which is deprecated! State/Shared better!
-                                            // shareIn(
+    // shareIn(
     // scope =
     // ) is used to transform flow -> SharedFlow
     // About halfway, F "shareIn(" - https://proandroiddev.com/should-we-choose-kotlins-stateflow-or-sharedflow-to-substitute-for-android-s-livedata-2d69f2bd6fa5
@@ -120,6 +124,24 @@ class SecondScreenViewModel @Inject constructor(
                 _loadingState.emit(LoadingState.Idle)
             }
         }
+    }
+
+    // Takes a float array (array filled with 80k+ sound floats) and creates a CSV file on the Android file system
+    // NB Cant be used to create file within THIS devices' system, would require network to do so
+    fun saveOutputToFile(generatedSound: FloatArray, context: Context) {
+       val fos = // Note this'll store it in [Android>YourApp>documents] something like that
+           FileOutputStream("${context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)}/fileToWriteTo.csv")
+        val osw = OutputStreamWriter(fos)
+
+        osw.write("TITLE FOR COLUMN \n")
+        generatedSound.forEach {
+            try {
+                osw.write("$it,, \n") // ,, is part of CSV structure
+            } catch (e: Exception) {
+
+            }
+        }
+        osw.close()
     }
 
     fun getTriggeredTing(): String? { // This is a getter, so it ISNT reactive! It should be observing so it auto gets it
