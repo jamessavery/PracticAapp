@@ -1,20 +1,25 @@
 package com.example.featurescreensecond.secondscreen
 
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.WindowCompat
+import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.*
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
+import androidx.recyclerview.widget.RecyclerView
 import com.example.data.services.response.QuoteList
 import com.example.featurescreensecond.R
 import com.example.featurescreensecond.databinding.ActivitySecondScreenBinding
 import dagger.android.support.DaggerAppCompatActivity
+import com.example.featurescreensecond.secondscreen.pageradapter.SectionsPagerAdapter
+import com.example.featurescreensecond.secondscreen.pageradapter.SwipeControlTouchListener
+import com.example.featurescreensecond.secondscreen.pageradapter.SwipeDirection
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,7 +35,11 @@ class SecondScreenActivity : DaggerAppCompatActivity(), LifecycleOwner {
 
     //    lateinit var recyclerView: RecyclerView
 //    val adapter = QuotesRecyclerViewAdapter()
-    lateinit var myRecyclerViewAdapter: QuotesRecyclerViewAdapter
+//    lateinit var myRecyclerViewAdapter: QuotesRecyclerViewAdapter
+
+    private val swipeControlTouchListener by lazy {
+        SwipeControlTouchListener()
+    }
 
     var layoutManager = LinearLayoutManager(this)
 
@@ -39,22 +48,34 @@ class SecondScreenActivity : DaggerAppCompatActivity(), LifecycleOwner {
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_second_screen)
-//        binding = ActivitySecondScreenBinding.inflate(layoutInflater)
-//        binding.lifecycleOwner = this
-//        setContentView(binding.root)
+
+        val colorList = listOf(Color.CYAN, Color.GREEN, Color.YELLOW)
+        val sectionsPagerAdapter = SectionsPagerAdapter(this, colorList)
+        binding.viewPager.adapter = sectionsPagerAdapter
+
+        // apply touch listener on ViewPager RecyclerView
+        val recyclerView = binding.viewPager[0] as? RecyclerView
+        if (recyclerView != null) {
+            recyclerView.addOnItemTouchListener(swipeControlTouchListener)
+        } else {
+            Log.w(localClassName, "RecyclerView is null, Version changed ?!")
+        }
+
+        swipeControlTouchListener.setSwipeDirection(SwipeDirection.ALL)
 
         setupListeners()
         setupObservers()
 
-        myRecyclerViewAdapter = QuotesRecyclerViewAdapter(
-            this, mutableListOf(AuthorModel("", ""))
-        )
-        binding.quotesRecyclerV.layoutManager = layoutManager
-        binding.myAdapter = myRecyclerViewAdapter
+//        myRecyclerViewAdapter = QuotesRecyclerViewAdapter(
+//            this, mutableListOf(AuthorModel("", ""))
+//        )
+////        binding.quotesRecyclerV.layoutManager = layoutManager
+//        binding.myAdapter = myRecyclerViewAdapter
     }
 
     private fun setupListeners() {
         with(binding) {
+
             //secondScreenTV.text = viewModel.getTriggeredTing() ?: "Second Screen"
         }
     }
@@ -103,7 +124,7 @@ class SecondScreenActivity : DaggerAppCompatActivity(), LifecycleOwner {
         content.results?.forEach {
             authorModel.add(AuthorModel(it.author, it.authorSlug))
         }
-        myRecyclerViewAdapter.submitList(authorModel)
+//        myRecyclerViewAdapter.submitList(authorModel)
         layoutManager.scrollToPosition(0) // Might not be needed ?
     }
 }

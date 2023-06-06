@@ -295,7 +295,7 @@ class OpeningViewModel @Inject constructor(
             Observable.concat(observable1, observable2)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io()).subscribe {
-                    Log.e("JimmySuccess", it.results?.first().toString())
+                    Log.e("JimmySuccess", it.results?.first().toString()) // .first() can also convert flow (sequence of items) into a suspend F (takes first, as flows are for sequences)
                 } // THIS WORKS EXACTLY AS INTENDED!
         }
 
